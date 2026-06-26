@@ -2140,6 +2140,11 @@
       chatActions.hidden = chatActions.querySelectorAll("[data-chat]").length === 0;
     }
 
+    function setChatDebugSource(source, error = "") {
+      chatPanel.dataset.answerSource = source;
+      chatPanel.dataset.answerError = String(error || "").slice(0, 180);
+    }
+
     function resolveFallbackAnswer(text) {
       if (/助成金|補助|金額|費用|いくら|10万|賃金|給与/.test(text)) return fallbackAnswers.subsidy;
       if (/本人|太郎|講師|登壇|メイン|直接/.test(text)) return fallbackAnswers.pasotaro;
@@ -2181,6 +2186,7 @@
         const data = await response.json().catch(() => ({}));
         if (!response.ok || !data.answer) throw new Error(data.error || "Chat API error.");
         window.__pasotaroChatLastSource = "gemini-endpoint";
+        setChatDebugSource("gemini-endpoint");
         return String(data.answer).trim();
       } finally {
         window.clearTimeout(timeout);
@@ -2191,6 +2197,7 @@
       const firstAnswer = await requestGeminiDirect(buildGeminiPrompt(question));
       if (isCompleteChatAnswer(firstAnswer)) {
         window.__pasotaroChatLastSource = "gemini-direct";
+        setChatDebugSource("gemini-direct");
         return firstAnswer;
       }
       const retryAnswer = await requestGeminiDirect(`${buildGeminiPrompt(question)}
@@ -2198,6 +2205,7 @@
 重要: 前回の回答が途中で切れました。今回は必ず2〜3文で完結させ、最後は句点「。」で終えてください。`);
       if (isCompleteChatAnswer(retryAnswer)) {
         window.__pasotaroChatLastSource = "gemini-direct-retry";
+        setChatDebugSource("gemini-direct-retry");
         return retryAnswer;
       }
       throw new Error("Gemini returned incomplete answer.");
@@ -2266,6 +2274,7 @@
       } catch (error) {
         window.__pasotaroChatLastSource = "fallback";
         window.__pasotaroChatLastError = error?.message || String(error);
+        setChatDebugSource("fallback", error?.message || String(error));
         replaceMessage(pending, resolveFallbackAnswer(fallbackKey ? chatQuestions[fallbackKey] : question));
       } finally {
         setComposerBusy(false);

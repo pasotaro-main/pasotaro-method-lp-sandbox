@@ -1041,7 +1041,8 @@
     }
     .chat-cta {
       justify-self: start;
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
       gap: 6px;
       margin-top: -4px;
     }
@@ -1057,6 +1058,11 @@
       font-size: 12px;
       font-weight: 900;
       text-decoration: none;
+    }
+    .chat-cta a.secondary {
+      color: var(--ink);
+      background: #ffffff;
+      border: 1px solid var(--line);
     }
     .chat-choice {
       width: 100%;
@@ -2049,8 +2055,6 @@
       <button class="chat-choice" type="button" data-chat="pasotaro">本人登壇</button>
       <button class="chat-choice" type="button" data-chat="party">懇親会はありますか？</button>
       <button class="chat-choice" type="button" data-chat="prepare">参加条件</button>
-      <a class="chat-entry" href="#entry">仮申し込みフォームへ</a>
-      <a class="chat-entry secondary" href="mailto:jimuco@pasotaro.com?cc=pasotaro@pasotaro.com&subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">相談メールを送る</a>
     </div>
   </aside>
 
@@ -2064,6 +2068,7 @@
     const chatPanel = document.getElementById("entryChat");
     const chatLog = document.getElementById("chatLog");
     const chatComposer = document.getElementById("chatComposer");
+    const chatActions = document.querySelector(".chat-actions");
     const chatText = document.getElementById("chatText");
     const preEntryForm = document.getElementById("preEntryForm");
     const formStatus = document.getElementById("formStatus");
@@ -2116,11 +2121,21 @@
       cta.className = "chat-cta";
       const entry = document.createElement("a");
       entry.href = "#entry";
-      entry.textContent = "本申込ではないので、まず仮申し込みで枠を押さえる";
+      entry.textContent = "仮申し込みで枠を押さえる";
       entry.addEventListener("click", () => toggleChat(false));
       cta.appendChild(entry);
+      const mail = document.createElement("a");
+      mail.href = "mailto:jimuco@pasotaro.com?cc=pasotaro@pasotaro.com&subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A";
+      mail.className = "secondary";
+      mail.textContent = "相談メールを送る";
+      cta.appendChild(mail);
       chatLog.appendChild(cta);
       chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function updateChoiceVisibility() {
+      if (!chatActions) return;
+      chatActions.hidden = chatActions.querySelectorAll("[data-chat]").length === 0;
     }
 
     function resolveFallbackAnswer(text) {
@@ -2188,6 +2203,8 @@
     document.querySelectorAll("[data-chat]").forEach((button) => {
       button.addEventListener("click", () => {
         const key = button.getAttribute("data-chat");
+        button.remove();
+        updateChoiceVisibility();
         answerChat(chatQuestions[key] || button.textContent, key);
       });
     });

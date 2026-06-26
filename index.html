@@ -2220,7 +2220,7 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: buildGeminiPrompt(question) }] }],
+            contents: [{ parts: [{ text: prompt }] }],
             generationConfig: { temperature: 0.35, maxOutputTokens: 760 }
           }),
           signal: controller.signal

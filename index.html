@@ -947,13 +947,14 @@
       width: min(380px, calc(100vw - 32px));
       max-height: min(620px, calc(100vh - 120px));
       display: none;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto minmax(120px, 1fr) auto auto;
       border: 1px solid rgba(17,18,20,0.16);
       border-radius: 8px;
       overflow: hidden;
       background: #ffffff;
       box-shadow: 0 24px 70px rgba(17,18,20,0.26);
     }
+    .chat-launch[aria-expanded="true"] { display: none; }
     .chat-panel.open { display: grid; }
     .chat-head {
       display: flex;
@@ -996,6 +997,7 @@
     .chat-msg.user { justify-self: end; color: #ffffff; background: var(--red); }
     .chat-actions {
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 12px;
       border-top: 1px solid var(--line);
@@ -1053,19 +1055,21 @@
     }
     .chat-choice {
       width: 100%;
-      min-height: 40px;
-      padding: 9px 11px;
+      min-height: 36px;
+      padding: 8px 10px;
       border: 1px solid var(--line);
       border-radius: 8px;
       color: var(--ink);
       background: #ffffff;
       font: inherit;
+      font-size: 13px;
       font-weight: 800;
       text-align: left;
       cursor: pointer;
     }
     .chat-choice:hover { border-color: var(--red); }
     .chat-entry {
+      grid-column: 1 / -1;
       display: inline-flex;
       justify-content: center;
       align-items: center;
@@ -1152,9 +1156,16 @@
       }
       .chat-panel {
         right: 16px;
-        bottom: 86px;
+        bottom: 16px;
         width: calc(100vw - 32px);
-        max-height: min(620px, calc(100vh - 96px));
+        max-height: min(640px, calc(100vh - 48px));
+      }
+      .chat-log {
+        padding: 12px;
+      }
+      .chat-actions {
+        gap: 6px;
+        padding: 10px 12px 12px;
       }
     }
     @media (max-width: 600px) {
@@ -1951,8 +1962,9 @@
           <p>仮申し込み後、御社ならどのファイルから始めると2日で成果物になりやすいか、助成金を検討するなら何を確認すべきかを15分ほどで整理します。</p>
           <p class="entry-note">仮申し込みは本申込確定ではありません。日程、人数、持ち込みファイル、参加条件、助成金確認の状況を確認したうえで、本申込へ進みます。</p>
         </div>
-        <form class="entry-form" id="preEntryForm" aria-label="仮申し込みフォーム" action="https://formsubmit.co/info@pasotaro.com" method="POST">
+        <form class="entry-form" id="preEntryForm" aria-label="仮申し込みフォーム" action="https://formsubmit.co/jimuco@pasotaro.com" method="POST">
           <input type="hidden" name="_subject" value="パソコン太郎メゾットAI講習会 初級編 仮申し込み">
+          <input type="hidden" name="_cc" value="pasotaro@pasotaro.com">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_next" id="formNext" value="">
@@ -1997,44 +2009,44 @@
           </div>
           <button class="button primary form-submit" type="submit">仮申し込み内容を送る</button>
           <div class="entry-subactions">
-            <a class="entry-mail" href="mailto:info@pasotaro.com?subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">まだ迷っている方は相談メールを送る</a>
+            <a class="entry-mail" href="mailto:jimuco@pasotaro.com?cc=pasotaro@pasotaro.com&subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">まだ迷っている方は相談メールを送る</a>
           </div>
-          <p class="form-note" id="formStatus">送信すると、仮申し込み内容が受付メールに届きます。送れない場合は、下の相談メールから同じ内容をお送りください。</p>
+          <p class="form-note" id="formStatus">送信すると、仮申し込み内容が事務局とパソコン太郎に届きます。送れない場合は、下の相談メールから同じ内容をお送りください。</p>
         </form>
       </div>
     </section>
   </main>
 
   <button class="chat-launch" type="button" id="chatLaunch" aria-controls="entryChat" aria-expanded="false">
-    <span class="chat-launch-main">質問AIチャット</span>
-    <span class="chat-launch-sub">申込前に確認できます</span>
+    <span class="chat-launch-main">申込前チャット</span>
+    <span class="chat-launch-sub">質問できます</span>
   </button>
-  <aside class="chat-panel" id="entryChat" aria-label="講習会質問AIチャット">
+  <aside class="chat-panel" id="entryChat" aria-label="講習会申込前チャット">
     <div class="chat-head">
       <div>
-        <strong>第1期の質問AIチャット</strong>
+        <strong>第1期の申込前チャット</strong>
         <span>仮申し込み前の不安を整理します</span>
       </div>
       <button class="chat-close" type="button" id="chatClose" aria-label="チャットを閉じる">×</button>
     </div>
     <div class="chat-log" id="chatLog">
-      <div class="chat-msg bot">第1期は2026年10月15日(木)・16日(金)、宇都宮開催、最大12人限定、1社4名まで。パソコン太郎本人が2日間メイン講師を務める特別回です。気になることを選んでください。</div>
-    </div>
-    <div class="chat-actions">
-      <button class="chat-choice" type="button" data-chat="fit">うちの会社でも作れますか？</button>
-      <button class="chat-choice" type="button" data-chat="subsidy">助成金だといくらくらいですか？</button>
-      <button class="chat-choice" type="button" data-chat="file">どんなファイルを持っていけばいいですか？</button>
-      <button class="chat-choice" type="button" data-chat="track">パソコン太郎の実績は？</button>
-      <button class="chat-choice" type="button" data-chat="pasotaro">第1期は本人がメイン講師ですか？</button>
-      <button class="chat-choice" type="button" data-chat="party">懇親会はありますか？</button>
-      <button class="chat-choice" type="button" data-chat="prepare">参加前に何が必要ですか？</button>
-      <a class="chat-entry" href="#entry">仮申し込みフォームへ</a>
-      <a class="chat-entry secondary" href="mailto:info@pasotaro.com?subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">相談メールを送る</a>
+      <div class="chat-msg bot">気になることを選ぶか、下に入力してください。第1期は2026年10月15日(木)・16日(金)宇都宮開催、最大12人限定、1社4名まで。パソコン太郎本人が2日間メイン講師を務める特別回です。</div>
     </div>
     <form class="chat-composer" id="chatComposer" aria-label="チャットに質問する">
       <input type="text" id="chatText" autocomplete="off" placeholder="例: 助成金は使えますか？">
       <button class="chat-send" type="submit">送信</button>
     </form>
+    <div class="chat-actions">
+      <button class="chat-choice" type="button" data-chat="fit">作れますか？</button>
+      <button class="chat-choice" type="button" data-chat="subsidy">助成金の目安</button>
+      <button class="chat-choice" type="button" data-chat="file">持ち込みファイル</button>
+      <button class="chat-choice" type="button" data-chat="track">実績</button>
+      <button class="chat-choice" type="button" data-chat="pasotaro">本人登壇</button>
+      <button class="chat-choice" type="button" data-chat="party">懇親会はありますか？</button>
+      <button class="chat-choice" type="button" data-chat="prepare">参加条件</button>
+      <a class="chat-entry" href="#entry">仮申し込みフォームへ</a>
+      <a class="chat-entry secondary" href="mailto:jimuco@pasotaro.com?cc=pasotaro@pasotaro.com&subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">相談メールを送る</a>
+    </div>
   </aside>
 
   <footer>
@@ -2075,11 +2087,13 @@
     }
 
     function addChatCta() {
+      chatLog.querySelectorAll(".chat-cta").forEach((oldCta) => oldCta.remove());
       const cta = document.createElement("div");
       cta.className = "chat-cta";
       const entry = document.createElement("a");
       entry.href = "#entry";
-      entry.textContent = "仮申し込みで枠を押さえる";
+      entry.textContent = "本申込ではないので、まず仮申し込みで枠を押さえる";
+      entry.addEventListener("click", () => toggleChat(false));
       cta.appendChild(entry);
       chatLog.appendChild(cta);
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -2101,6 +2115,9 @@
 
     chatLaunch.addEventListener("click", () => toggleChat(!chatPanel.classList.contains("open")));
     chatClose.addEventListener("click", () => toggleChat(false));
+    document.querySelectorAll(".chat-entry[href='#entry']").forEach((entry) => {
+      entry.addEventListener("click", () => toggleChat(false));
+    });
     document.querySelectorAll("[data-chat]").forEach((button) => {
       button.addEventListener("click", () => {
         const key = button.getAttribute("data-chat");

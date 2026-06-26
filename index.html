@@ -2187,6 +2187,16 @@
     }
 
     async function askGeminiDirect(question) {
+      const firstAnswer = await requestGeminiDirect(buildGeminiPrompt(question));
+      if (isCompleteChatAnswer(firstAnswer)) return firstAnswer;
+      const retryAnswer = await requestGeminiDirect(`${buildGeminiPrompt(question)}
+
+重要: 前回の回答が途中で切れました。今回は必ず2〜3文で完結させ、最後は句点「。」で終えてください。`);
+      if (isCompleteChatAnswer(retryAnswer)) return retryAnswer;
+      throw new Error("Gemini returned incomplete answer.");
+    }
+
+    async function requestGeminiDirect(prompt) {
       const controller = new AbortController();
       const timeout = window.setTimeout(() => controller.abort(), CHAT_API_TIMEOUT_MS);
       try {
@@ -2208,6 +2218,11 @@
       } finally {
         window.clearTimeout(timeout);
       }
+    }
+
+    function isCompleteChatAnswer(answer) {
+      const text = String(answer || "").trim();
+      return text.length >= 55 && /[。！？]$/.test(text);
     }
 
     function buildGeminiPrompt(question) {

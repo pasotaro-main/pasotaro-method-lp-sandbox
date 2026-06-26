@@ -854,6 +854,28 @@
       line-height: 1.45;
     }
     .entry-form label.wide { grid-column: 1 / -1; }
+    .google-form-step {
+      display: grid;
+      gap: 7px;
+      min-height: 112px;
+      padding: 16px;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #f8fafc;
+      align-content: start;
+    }
+    .google-form-step.wide { grid-column: 1 / -1; min-height: auto; }
+    .google-form-step strong {
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    .google-form-step span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.65;
+    }
     .entry-form input,
     .entry-form select,
     .entry-form textarea {
@@ -1211,7 +1233,7 @@
         <a href="#flow">2日間の流れ</a>
         <a href="#timetable">時間割</a>
         <a href="#qa">Q&A</a>
-        <a class="button primary" href="#entry">仮申し込み</a>
+        <a class="button primary" href="#entry" data-google-entry data-entry-intent="仮申し込み">仮申し込み</a>
       </nav>
     </div>
   </header>
@@ -1229,7 +1251,7 @@
             <span>2日目夜の懇親会にも本人が参加します。今後は本人以外の講師が担当する可能性があります。仮申し込みは本申込ではありません。参加可否、助成金、持ち込みファイルを確認してから確定します。</span>
           </div>
           <div class="hero-actions">
-            <a class="button primary" href="#entry">第1期に仮申し込みする</a>
+            <a class="button primary" href="#entry" data-google-entry data-entry-intent="仮申し込み">第1期に仮申し込みする</a>
             <a class="button ghost" href="#subsidy">助成金活用の目安を見る</a>
           </div>
           <div class="hero-facts" aria-label="講習会の重要情報">
@@ -1260,7 +1282,7 @@
             <strong>助成金を検討する会社ほど、先に枠と確認事項を押さえてください。</strong>
             <span>仮申し込み後に、対象者が雇用保険被保険者か、役員参加をどう扱うか、社労士確認、持ち込みファイルを整理してから本申込へ進みます。</span>
           </div>
-          <a class="button primary" href="#entry">この内容なら仮申し込みしておく</a>
+          <a class="button primary" href="#entry" data-google-entry data-entry-intent="仮申し込み">この内容なら仮申し込みしておく</a>
         </div>
       </div>
     </section>
@@ -1422,7 +1444,7 @@
             <strong>第1期は、本人がメイン講師として御社の見立てまで行う回です。</strong>
             <span>今後は認定講師が中心になる可能性があります。本人から直接、御社のファイルと作るアプリの方向性を見てもらいたい会社は、まず仮申し込みで枠を押さえてください。</span>
           </div>
-          <a class="button primary" href="#entry">本人から直接学べる第1期に仮申し込みする</a>
+          <a class="button primary" href="#entry" data-google-entry data-entry-intent="仮申し込み">本人から直接学べる第1期に仮申し込みする</a>
         </div>
       </div>
     </section>
@@ -1574,7 +1596,7 @@
             <strong>第1期は本人がメイン講師を務める特別回です。</strong>
             <span>2日間の研修は本人が中心となって進行し、2日目夜の懇親会にも参加します。本人の見立てを受けたい会社は、まず枠を押さえてください。</span>
           </div>
-          <a class="button primary" href="#entry">本人から学べる第1期に仮申し込みする</a>
+          <a class="button primary" href="#entry" data-google-entry data-entry-intent="仮申し込み">本人から学べる第1期に仮申し込みする</a>
         </div>
         <p class="small-note">第2期以降は、パソコン太郎メゾットを理解した講師が担当する場合があります。第1期は本人が2日間のメイン講師を務める特別体制です。2日目夜の懇親会にも本人が参加します。懇親会は希望者参加、別途5,000円です。</p>
       </div>
@@ -1825,7 +1847,7 @@
             <strong>価格を見て迷ったら、まず仮申し込みで確認してください。</strong>
             <span>仮申し込みは本申込ではありません。参加可否、助成金、持ち込みファイルを確認してから確定します。</span>
           </div>
-          <a class="button primary" href="#entry">この条件で仮申し込みしておく</a>
+          <a class="button primary" href="#entry" data-google-entry data-entry-intent="仮申し込み">この条件で仮申し込みしておく</a>
         </div>
       </div>
     </section>
@@ -1835,10 +1857,10 @@
         <div class="section-head">
           <div class="label">ENTRY FLOW</div>
           <h2>仮申し込み後に、作るアプリと助成金の確認ポイントを整理します。</h2>
-          <p class="lead">フォーム送信だけで本申込確定ではありません。第1期の枠を押さえる入口として、送信後にこちらから参加条件、持ち込みファイル、助成金確認の状況についてご連絡します。</p>
+          <p class="lead">Googleフォーム送信だけで本申込確定ではありません。第1期の枠を押さえる入口として、送信後にこちらから参加条件、持ち込みファイル、助成金確認の状況についてご連絡します。</p>
         </div>
         <div class="grid-3">
-          <div class="card blueline"><h3>1. 仮申し込み</h3><p>参加人数（1社4名まで）、会社の業種、作りたい業務アプリの候補をフォームで送ります。</p></div>
+          <div class="card blueline"><h3>1. 仮申し込み</h3><p>参加人数（1社4名まで）、会社の業種、作りたい業務アプリの候補をGoogleフォームで送ります。</p></div>
           <div class="card blueline"><h3>2. ファイル候補確認</h3><p>Excel、PDF、マニュアルなど、2日で扱いやすいファイルを1つに絞ります。</p></div>
           <div class="card blueline"><h3>3. 助成金の事前確認</h3><p>希望する会社は、顧問社労士または管轄労働局へ計画届、対象者が雇用保険被保険者か、役員参加の扱いを確認します。</p></div>
           <div class="card blueline"><h3>4. 受講確定</h3><p>日程、人数、支払い、持ち込みファイル、参加条件を確認して受講を確定します。</p></div>
@@ -1966,7 +1988,7 @@
             <strong>不安が残る場合も、仮申し込み後に確認できます。</strong>
             <span>本申込ではないため、条件確認後に参加するか判断できます。第1期の12人枠、1社4名までの参加枠だけ先に押さえてください。</span>
           </div>
-          <a class="button primary" href="#entry">確認前提で仮申し込みする</a>
+          <a class="button primary" href="#entry" data-google-entry data-entry-intent="仮申し込み">確認前提で仮申し込みする</a>
         </div>
       </div>
     </section>
@@ -1979,63 +2001,27 @@
           <p>仮申し込み後、こちらから参加条件、持ち込みファイル、助成金確認の状況についてご連絡します。</p>
           <p class="entry-note">仮申し込みは本申込確定ではありません。日程、人数、持ち込みファイル、参加条件、助成金確認の状況を確認したうえで、本申込へ進みます。</p>
         </div>
-        <form class="entry-form" id="preEntryForm" aria-label="仮申し込み・事前相談フォーム" action="https://formsubmit.co/pasotaro@pasotaro.com" method="POST">
-          <input type="hidden" name="_subject" id="formSubject" value="パソコン太郎メゾットAI講習会 初級編 仮申し込み">
-          <input type="hidden" name="_cc" value="jimuco@pasotaro.com">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" id="formNext" value="">
-          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
+        <div class="entry-form google-entry-card" id="googleEntryCard" aria-label="Googleフォームで仮申し込み・事前相談">
           <div class="form-grid">
-            <label>送信内容
-              <select name="intent" id="formIntent">
-                <option value="仮申し込み">仮申し込み</option>
-                <option value="事前相談">事前相談</option>
-              </select>
-            </label>
-            <label>会社名
-              <input type="text" name="company" autocomplete="organization" required>
-            </label>
-            <label>担当者名
-              <input type="text" name="name" autocomplete="name" required>
-            </label>
-            <label>メールアドレス
-              <input type="email" name="email" autocomplete="email" required>
-            </label>
-            <label>電話番号
-              <input type="tel" name="tel" autocomplete="tel">
-            </label>
-            <label>参加予定人数（1社4名まで）
-              <input type="number" name="participants" min="1" max="4" value="1" required>
-            </label>
-            <label>助成金の活用
-              <select name="subsidy">
-                <option value="検討したい">検討したい</option>
-                <option value="すでに社労士へ相談中">すでに社労士へ相談中</option>
-                <option value="今回は使わない">今回は使わない</option>
-                <option value="まだ分からない">まだ分からない</option>
-              </select>
-            </label>
-            <label>懇親会の参加希望
-              <select name="party">
-                <option value="参加したい">参加したい</option>
-                <option value="人数を確認して決めたい">人数を確認して決めたい</option>
-                <option value="参加しない">参加しない</option>
-              </select>
-            </label>
-            <label>持ち込みファイル候補
-              <input type="text" name="file" placeholder="例: 日報Excel、料金表PDF、社内マニュアル">
-            </label>
-            <label class="wide">作りたいアプリ・確認したいこと
-              <textarea name="message" rows="4" placeholder="例: まず全社員で使える日報アプリを作りたい。助成金の事前確認もしたい。"></textarea>
-            </label>
+            <div class="google-form-step">
+              <strong>1. Googleフォームを開く</strong>
+              <span>会社名、担当者、参加予定人数、助成金活用、懇親会希望、持ち込みファイル候補を入力します。</span>
+            </div>
+            <div class="google-form-step">
+              <strong>2. こちらから確認連絡</strong>
+              <span>送信後、参加条件、持ち込みファイル、助成金確認の状況についてこちらからご連絡します。</span>
+            </div>
+            <div class="google-form-step wide">
+              <strong>3. 条件確認後に本申込</strong>
+              <span>仮申し込みは本申込ではありません。参加可否と確認事項を整理してから確定します。</span>
+            </div>
           </div>
-          <button class="button primary form-submit" type="submit">仮申し込み内容を送る</button>
+          <a class="button primary form-submit" href="#entry" data-google-entry data-entry-intent="仮申し込み">Googleフォームで仮申し込み</a>
           <div class="entry-subactions">
-            <button class="entry-mail" type="button" id="consultationButton">まだ迷っている方はフォームで相談する</button>
+            <a class="entry-mail" href="#entry" data-google-entry data-entry-intent="事前相談" id="consultationButton">まだ迷っている方はGoogleフォームで相談する</a>
           </div>
-          <p class="form-note" id="formStatus">送信すると、内容が事務局とパソコン太郎に届きます。メールソフトは開かず、このページ内のフォームから送れます。</p>
-        </form>
+          <p class="form-note" id="formStatus">Googleフォームで受け付けます。送信後、こちらから参加条件、持ち込みファイル、助成金確認の状況についてご連絡します。</p>
+        </div>
       </div>
     </section>
   </main>
@@ -2073,6 +2059,7 @@
   <footer>
     <div class="container">© ITSupportパソコン太郎株式会社 / パソコン太郎メゾットAI講習会 初級編</div>
   </footer>
+  <script src="assets/entry-config.js?v=20260627-google-form"></script>
   <script src="assets/chat-config.js?v=20260626-gemini"></script>
   <script>
     const chatLaunch = document.getElementById("chatLaunch");
@@ -2082,12 +2069,11 @@
     const chatComposer = document.getElementById("chatComposer");
     const chatActions = document.querySelector(".chat-actions");
     const chatText = document.getElementById("chatText");
-    const preEntryForm = document.getElementById("preEntryForm");
+    const googleEntryCard = document.getElementById("googleEntryCard");
     const formStatus = document.getElementById("formStatus");
-    const formNext = document.getElementById("formNext");
-    const formSubject = document.getElementById("formSubject");
-    const formIntent = document.getElementById("formIntent");
     const consultationButton = document.getElementById("consultationButton");
+    const GOOGLE_FORM_URL = window.PASOTARO_GOOGLE_FORM_URL || "";
+    const GOOGLE_FORM_CONSULT_URL = window.PASOTARO_GOOGLE_FORM_CONSULT_URL || GOOGLE_FORM_URL;
     const GEMINI_CHAT_ENDPOINT = window.PASOTARO_GEMINI_CHAT_ENDPOINT || "";
     const GEMINI_API_KEY = window.PASOTARO_GEMINI_API_KEY || "";
     const GEMINI_MODEL = window.PASOTARO_GEMINI_MODEL || "gemini-2.5-flash";
@@ -2107,7 +2093,7 @@
       file: "おすすめは、すでに業務で使っているExcel、PDF、マニュアル、料金表、日報、問い合わせ履歴です。個人情報や機密情報は匿名化・サンプル化してください。迷う場合も、まず仮申し込みで候補を書いてください。送信後、こちらから持ち込みファイルの確認連絡をします。",
       track: "パソコン太郎は、幼稚園生から高齢者まで1000時間以上の講習会・授業を行い、NPO ITアット宇都宮の立ち上げにも初代理事長として関わってきました。著名なビジネスインフルエンサーとのAI・出版プロジェクト、国会議員へのAI・ITレクチャー、教育委員会、金融機関、商工会議所向け講習など、相手に合わせてITとAIを分かる言葉にしてきた人です。第1期はその本人が2日間メイン講師を務めるため、本人の見立てを受けたい会社は仮申し込みで枠を押さえておくのがおすすめです。",
       pasotaro: "はい。2026年10月15日(木)・16日(金)の第1期は、パソコン太郎本人が2日間のメイン講師を務めます。講義、見立て、制作の判断、まとめまで本人が中心となって進行します。今後はパソコン太郎メゾットを理解した講師が担当する可能性があるため、本人の判断基準を直接受け取れる特別回です。本人から直接受けたい場合は、第1期の仮申し込みで先に枠を押さえてください。",
-      party: "あります。1日目夜は宿題の時間を確保し、2日目の研修後に希望者参加の懇親会を開催します。パソコン太郎本人も参加し、第1期は2日間とも本人がメイン講師を務めます。参加費は別途5,000円です。懇親会まで含めて本人に聞ける機会なので、参加希望も仮申し込みフォームで入れてください。",
+      party: "あります。1日目夜は宿題の時間を確保し、2日目の研修後に希望者参加の懇親会を開催します。パソコン太郎本人も参加し、第1期は2日間とも本人がメイン講師を務めます。参加費は別途5,000円です。懇親会まで含めて本人に聞ける機会なので、参加希望もGoogleフォームで入れてください。",
       prepare: "Googleアカウント、最新版Chrome、16GB以上のノートPC、クレジットカード、業務ファイル1つ、録音できる環境が必要です。当日使う環境名や設定手順は、受講確定後に個別案内します。準備に不安がある場合も、仮申し込み後にこちらから確認連絡をします。"
     };
     const fallbackAnswer = "ありがとうございます。第1期は最大12人限定、1社4名までの少人数開催です。内容、助成金、持ち込みファイル、参加条件は仮申し込み後に確認してから本申込へ進めます。不安が残る場合ほど、まず仮申し込みで枠だけ押さえて確認するのがおすすめです。";
@@ -2137,40 +2123,56 @@
       const cta = document.createElement("div");
       cta.className = "chat-cta";
       const entry = document.createElement("a");
-      entry.href = "#entry";
+      entry.href = getGoogleFormUrl("仮申し込み") || "#entry";
+      entry.dataset.googleEntry = "";
+      entry.dataset.entryIntent = "仮申し込み";
       entry.textContent = "仮申し込みで枠を押さえる";
       entry.addEventListener("click", () => toggleChat(false));
       cta.appendChild(entry);
       const mail = document.createElement("a");
-      mail.href = "#entry";
+      mail.href = getGoogleFormUrl("事前相談") || "#entry";
+      mail.dataset.googleEntry = "";
+      mail.dataset.entryIntent = "事前相談";
       mail.className = "secondary";
       mail.textContent = "フォームで相談する";
-      mail.addEventListener("click", () => {
-        toggleChat(false);
-        setFormIntent("事前相談", { scroll: true, focusMessage: true });
-      });
+      mail.addEventListener("click", () => toggleChat(false));
       cta.appendChild(mail);
       chatLog.appendChild(cta);
       chatLog.scrollTop = chatLog.scrollHeight;
     }
 
+    function getGoogleFormUrl(intent = "仮申し込み") {
+      return intent === "事前相談" ? GOOGLE_FORM_CONSULT_URL : GOOGLE_FORM_URL;
+    }
+
+    function openGoogleForm(intent = "仮申し込み") {
+      const url = getGoogleFormUrl(intent);
+      if (url) {
+        window.open(url, "_blank", "noopener");
+        if (formStatus) {
+          formStatus.textContent = intent === "事前相談"
+            ? "Googleフォームを開きました。相談内容を送信後、こちらからご連絡します。"
+            : "Googleフォームを開きました。仮申し込み送信後、こちらから参加条件、持ち込みファイル、助成金確認の状況についてご連絡します。";
+        }
+        return;
+      }
+
+      googleEntryCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (formStatus) {
+        formStatus.textContent = "GoogleフォームURLを準備中です。URLを設定すると、このボタンから直接仮申し込み・事前相談を送れます。";
+      }
+    }
+
     function setFormIntent(intent, options = {}) {
-      const { scroll = false, focusMessage = false } = options;
-      if (formIntent) formIntent.value = intent;
-      if (formSubject) formSubject.value = `パソコン太郎メゾットAI講習会 初級編 ${intent}`;
-      const submitButton = preEntryForm.querySelector(".form-submit");
-      if (submitButton) submitButton.textContent = intent === "事前相談" ? "相談内容を送る" : "仮申し込み内容を送る";
+      const { scroll = false } = options;
+      const submitButton = googleEntryCard.querySelector(".form-submit");
+      if (submitButton) submitButton.textContent = intent === "事前相談" ? "Googleフォームで相談する" : "Googleフォームで仮申し込み";
       if (formStatus) {
         formStatus.textContent = intent === "事前相談"
-          ? "事前相談として送信します。メールソフトは開かず、このページ内のフォームから事務局とパソコン太郎に届きます。"
-          : "送信すると、内容が事務局とパソコン太郎に届きます。メールソフトは開かず、このページ内のフォームから送れます。";
+          ? "Googleフォームで事前相談を受け付けます。送信後、こちらからご連絡します。"
+          : "Googleフォームで仮申し込みを受け付けます。送信後、こちらから参加条件、持ち込みファイル、助成金確認の状況についてご連絡します。";
       }
-      if (scroll) preEntryForm.scrollIntoView({ behavior: "smooth", block: "start" });
-      if (focusMessage) {
-        window.setTimeout(() => {
-          preEntryForm.querySelector('textarea[name="message"]')?.focus();
-        }, 350);
-      }
+      if (scroll) googleEntryCard.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function updateChoiceVisibility() {
@@ -2301,6 +2303,7 @@
 - 2日間で、会社全員がURLで使えるWebアプリを2つ持ち帰る。
 - 1つ目は共通課題で作り、2つ目は自社ファイルや音声ヒアリングをもとに会社用へ近づける。
 - 参加条件はGoogleアカウント、最新版Chrome、16GB以上のノートPC、クレジットカード、業務ファイル1つ、録音できる環境。
+- 仮申し込み・事前相談はGoogleフォームで受け付ける。Googleフォーム送信だけでは本申込確定ではなく、送信後はこちらから連絡する。
 - 2日目研修後に希望者参加の懇親会があり、パソコン太郎本人も参加。別途5,000円。
 - パソコン太郎はAIで事業を作り、講師をし、現場のソフト作りまで行ってきた実装型の経営者。
 - 幼稚園生から高齢者まで1000時間以上の講習会・授業経験、NPO ITアット宇都宮の立ち上げ、初代理事長経験がある。
@@ -2351,28 +2354,13 @@
       answerChat(question);
     });
 
-    formIntent.addEventListener("change", () => {
-      setFormIntent(formIntent.value);
-    });
-
-    consultationButton.addEventListener("click", () => {
-      setFormIntent("事前相談", { focusMessage: true });
-    });
-
-    preEntryForm.addEventListener("submit", (event) => {
-      const data = new FormData(preEntryForm);
-      setFormIntent(data.get("intent") || "仮申し込み");
-      const participants = Number(data.get("participants") || 0);
-      if (participants < 1 || participants > 4) {
-        event.preventDefault();
-        formStatus.textContent = "参加予定人数は1社4名までで入力してください。";
-        return;
-      }
-      const path = window.location.pathname.endsWith("/")
-        ? window.location.pathname
-        : window.location.pathname.replace(/[^/]*$/, "");
-      formNext.value = `${window.location.origin}${path}thanks.html`;
-      formStatus.textContent = "仮申し込み内容を送信しています。送信後、受付完了画面に移動します。";
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-google-entry]");
+      if (!trigger) return;
+      event.preventDefault();
+      const intent = trigger.getAttribute("data-entry-intent") || "仮申し込み";
+      setFormIntent(intent, { scroll: !getGoogleFormUrl(intent) });
+      openGoogleForm(intent);
     });
   </script>
 </body>

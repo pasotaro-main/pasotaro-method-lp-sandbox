@@ -1001,6 +1001,56 @@
       border-top: 1px solid var(--line);
       background: #ffffff;
     }
+    .chat-composer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      padding: 0 12px 12px;
+      background: #ffffff;
+    }
+    .chat-composer input {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 12px;
+      font-size: 13px;
+      outline: none;
+      background: #ffffff;
+    }
+    .chat-composer input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(209, 0, 26, 0.12);
+    }
+    .chat-send {
+      border: 0;
+      border-radius: 8px;
+      padding: 0 14px;
+      color: #ffffff;
+      background: var(--red);
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .chat-cta {
+      justify-self: start;
+      display: grid;
+      gap: 6px;
+      margin-top: -4px;
+    }
+    .chat-cta a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+    }
     .chat-choice {
       width: 100%;
       min-height: 40px;
@@ -1901,7 +1951,12 @@
           <p>仮申し込み後、御社ならどのファイルから始めると2日で成果物になりやすいか、助成金を検討するなら何を確認すべきかを15分ほどで整理します。</p>
           <p class="entry-note">仮申し込みは本申込確定ではありません。日程、人数、持ち込みファイル、参加条件、助成金確認の状況を確認したうえで、本申込へ進みます。</p>
         </div>
-        <form class="entry-form" id="preEntryForm" aria-label="仮申し込みフォーム">
+        <form class="entry-form" id="preEntryForm" aria-label="仮申し込みフォーム" action="https://formsubmit.co/info@pasotaro.com" method="POST">
+          <input type="hidden" name="_subject" value="パソコン太郎メゾットAI講習会 初級編 仮申し込み">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" id="formNext" value="">
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
           <div class="form-grid">
             <label>会社名
               <input type="text" name="company" autocomplete="organization" required>
@@ -1944,7 +1999,7 @@
           <div class="entry-subactions">
             <a class="entry-mail" href="mailto:info@pasotaro.com?subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">まだ迷っている方は相談メールを送る</a>
           </div>
-          <p class="form-note" id="formStatus">送信ボタンを押すと、入力内容をまとめたメール下書きが開きます。正式な申込フォームURLに差し替える場合は、この部分を差し替えます。</p>
+          <p class="form-note" id="formStatus">送信すると、仮申し込み内容が受付メールに届きます。送れない場合は、下の相談メールから同じ内容をお送りください。</p>
         </form>
       </div>
     </section>
@@ -1976,6 +2031,10 @@
       <a class="chat-entry" href="#entry">仮申し込みフォームへ</a>
       <a class="chat-entry secondary" href="mailto:info@pasotaro.com?subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">相談メールを送る</a>
     </div>
+    <form class="chat-composer" id="chatComposer" aria-label="チャットに質問する">
+      <input type="text" id="chatText" autocomplete="off" placeholder="例: 助成金は使えますか？">
+      <button class="chat-send" type="submit">送信</button>
+    </form>
   </aside>
 
   <footer>
@@ -1986,8 +2045,11 @@
     const chatClose = document.getElementById("chatClose");
     const chatPanel = document.getElementById("entryChat");
     const chatLog = document.getElementById("chatLog");
+    const chatComposer = document.getElementById("chatComposer");
+    const chatText = document.getElementById("chatText");
     const preEntryForm = document.getElementById("preEntryForm");
     const formStatus = document.getElementById("formStatus");
+    const formNext = document.getElementById("formNext");
     const chatAnswers = {
       fit: "業務に使っているExcel、PDF、マニュアル、日報、問い合わせ履歴などが1つでもあれば候補になります。2日で作れる範囲に絞るので、まずは「会社でよく聞かれること」「毎回同じ判断をしていること」から始めるのがおすすめです。その条件なら成果物候補になりやすいので、まず仮申し込みで枠を押さえて、どのファイルから始めるか一緒に確認してください。",
       subsidy: "中小企業の場合、研修費40万円に対して最大30万円の経費助成、さらに13時間分で13,000円の賃金助成が対象候補です。支給保証ではないため、顧問社労士または管轄労働局への事前確認が必要です。開催日は2026年10月15日(木)・16日(金)なので、助成金を検討する会社ほど先に仮申し込みで研修枠と確認事項を押さえるのがおすすめです。",
@@ -1997,6 +2059,7 @@
       party: "あります。1日目夜は宿題の時間を確保し、2日目の研修後に希望者参加の懇親会を開催します。パソコン太郎本人も参加し、第1期は2日間とも本人がメイン講師を務めます。参加費は別途5,000円です。懇親会まで含めて本人に聞ける機会なので、参加希望も仮申し込みフォームで入れてください。",
       prepare: "Googleアカウント、最新版Chrome、16GB以上のノートPC、クレジットカード、業務ファイル1つ、録音できる環境が必要です。当日使う環境名や設定手順は、受講確定後に個別案内します。準備に不安がある場合も、仮申し込み後に一緒に確認できます。"
     };
+    const fallbackAnswer = "ありがとうございます。第1期は最大12人限定、1社4名までの少人数開催です。内容、助成金、持ち込みファイル、参加条件は仮申し込み後に確認してから本申込へ進めます。不安が残る場合ほど、まず仮申し込みで枠だけ押さえて確認するのがおすすめです。";
 
     function toggleChat(open) {
       chatPanel.classList.toggle("open", open);
@@ -2011,6 +2074,31 @@
       chatLog.scrollTop = chatLog.scrollHeight;
     }
 
+    function addChatCta() {
+      const cta = document.createElement("div");
+      cta.className = "chat-cta";
+      const entry = document.createElement("a");
+      entry.href = "#entry";
+      entry.textContent = "仮申し込みで枠を押さえる";
+      cta.appendChild(entry);
+      chatLog.appendChild(cta);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function resolveChatAnswer(text) {
+      if (/助成金|補助|金額|費用|いくら|10万|賃金|給与/.test(text)) return chatAnswers.subsidy;
+      if (/本人|太郎|講師|登壇|メイン|直接/.test(text)) return chatAnswers.pasotaro;
+      if (/実績|すご|経歴|誰|官公庁|銀行|教育|議員|ホリエモン|出版/.test(text)) return chatAnswers.track;
+      if (/ファイル|Excel|エクセル|PDF|資料|データ|持ち込み|何を/.test(text)) return chatAnswers.file;
+      if (/準備|必要|パソコン|PC|Chrome|Google|アカウント|カード|メモリ/.test(text)) return chatAnswers.prepare;
+      if (/懇親|交流|飲み|夜|5000/.test(text)) return chatAnswers.party;
+      if (/日程|いつ|場所|宇都宮|10月|15|16|人数|何人|4名|12人/.test(text)) {
+        return "第1期は2026年10月15日(木)・16日(金)、宇都宮開催です。最大12人限定、1社4名までで、パソコン太郎本人が2日間メイン講師を務めます。人数が埋まる前に、仮申し込みで参加枠を押さえてから条件確認に進むのがおすすめです。";
+      }
+      if (/作れ|でき|アプリ|ソフト|Web|社内|URL|運用/.test(text)) return chatAnswers.fit;
+      return fallbackAnswer;
+    }
+
     chatLaunch.addEventListener("click", () => toggleChat(!chatPanel.classList.contains("open")));
     chatClose.addEventListener("click", () => toggleChat(false));
     document.querySelectorAll("[data-chat]").forEach((button) => {
@@ -2018,32 +2106,33 @@
         const key = button.getAttribute("data-chat");
         addMessage(button.textContent, "user");
         addMessage(chatAnswers[key], "bot");
+        addChatCta();
       });
     });
 
-    preEntryForm.addEventListener("submit", (event) => {
+    chatComposer.addEventListener("submit", (event) => {
       event.preventDefault();
+      const question = chatText.value.trim();
+      if (!question) return;
+      addMessage(question, "user");
+      addMessage(resolveChatAnswer(question), "bot");
+      addChatCta();
+      chatText.value = "";
+    });
+
+    preEntryForm.addEventListener("submit", (event) => {
       const data = new FormData(preEntryForm);
-      const subject = "パソコン太郎メゾットAI講習会 初級編 仮申し込み";
-      const body = [
-        "パソコン太郎メゾットAI講習会 初級編（2026年10月15日(木)・16日(金) 宇都宮開催）の仮申し込みです。",
-        "",
-        `会社名: ${data.get("company") || ""}`,
-        `担当者名: ${data.get("name") || ""}`,
-        `メールアドレス: ${data.get("email") || ""}`,
-        `電話番号: ${data.get("tel") || ""}`,
-        `参加予定人数: ${data.get("participants") || ""}`,
-        `助成金の活用: ${data.get("subsidy") || ""}`,
-        `懇親会の参加希望: ${data.get("party") || ""}`,
-        `持ち込みファイル候補: ${data.get("file") || ""}`,
-        "",
-        "作りたいアプリ・確認したいこと:",
-        data.get("message") || "",
-        "",
-        "※仮申し込み後、日程・人数・持ち込みファイル・参加条件・助成金確認の状況を確認したうえで本申込へ進みます。"
-      ].join("\n");
-      formStatus.textContent = "入力内容をまとめたメール下書きを開きます。メールを送信すると仮申し込みになります。";
-      window.location.href = `mailto:info@pasotaro.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const participants = Number(data.get("participants") || 0);
+      if (participants < 1 || participants > 4) {
+        event.preventDefault();
+        formStatus.textContent = "参加予定人数は1社4名までで入力してください。";
+        return;
+      }
+      const path = window.location.pathname.endsWith("/")
+        ? window.location.pathname
+        : window.location.pathname.replace(/[^/]*$/, "");
+      formNext.value = `${window.location.origin}${path}thanks.html`;
+      formStatus.textContent = "仮申し込み内容を送信しています。送信後、受付完了画面に移動します。";
     });
   </script>
 </body>

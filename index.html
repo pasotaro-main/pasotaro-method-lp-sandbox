@@ -2180,6 +2180,7 @@
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok || !data.answer) throw new Error(data.error || "Chat API error.");
+        window.__pasotaroChatLastSource = "gemini-endpoint";
         return String(data.answer).trim();
       } finally {
         window.clearTimeout(timeout);
@@ -2188,11 +2189,17 @@
 
     async function askGeminiDirect(question) {
       const firstAnswer = await requestGeminiDirect(buildGeminiPrompt(question));
-      if (isCompleteChatAnswer(firstAnswer)) return firstAnswer;
+      if (isCompleteChatAnswer(firstAnswer)) {
+        window.__pasotaroChatLastSource = "gemini-direct";
+        return firstAnswer;
+      }
       const retryAnswer = await requestGeminiDirect(`${buildGeminiPrompt(question)}
 
 重要: 前回の回答が途中で切れました。今回は必ず2〜3文で完結させ、最後は句点「。」で終えてください。`);
-      if (isCompleteChatAnswer(retryAnswer)) return retryAnswer;
+      if (isCompleteChatAnswer(retryAnswer)) {
+        window.__pasotaroChatLastSource = "gemini-direct-retry";
+        return retryAnswer;
+      }
       throw new Error("Gemini returned incomplete answer.");
     }
 
@@ -2257,6 +2264,8 @@
         const answer = await askGeminiChat(question);
         replaceMessage(pending, answer || resolveFallbackAnswer(question));
       } catch (error) {
+        window.__pasotaroChatLastSource = "fallback";
+        window.__pasotaroChatLastError = error?.message || String(error);
         replaceMessage(pending, resolveFallbackAnswer(fallbackKey ? chatQuestions[fallbackKey] : question));
       } finally {
         setComposerBusy(false);

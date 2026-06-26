@@ -896,9 +896,11 @@
       border-radius: 8px;
       color: var(--ink);
       background: #ffffff;
+      font: inherit;
       font-weight: 900;
       text-align: center;
       line-height: 1.35;
+      cursor: pointer;
     }
     .entry-mail:hover { border-color: var(--red); color: var(--red); }
     .form-note {
@@ -1977,14 +1979,20 @@
           <p>仮申し込み後、こちらから参加条件、持ち込みファイル、助成金確認の状況についてご連絡します。</p>
           <p class="entry-note">仮申し込みは本申込確定ではありません。日程、人数、持ち込みファイル、参加条件、助成金確認の状況を確認したうえで、本申込へ進みます。</p>
         </div>
-        <form class="entry-form" id="preEntryForm" aria-label="仮申し込みフォーム" action="https://formsubmit.co/jimuco@pasotaro.com" method="POST">
-          <input type="hidden" name="_subject" value="パソコン太郎メゾットAI講習会 初級編 仮申し込み">
+        <form class="entry-form" id="preEntryForm" aria-label="仮申し込み・事前相談フォーム" action="https://formsubmit.co/jimuco@pasotaro.com" method="POST">
+          <input type="hidden" name="_subject" id="formSubject" value="パソコン太郎メゾットAI講習会 初級編 仮申し込み">
           <input type="hidden" name="_cc" value="pasotaro@pasotaro.com">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_next" id="formNext" value="">
           <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
           <div class="form-grid">
+            <label>送信内容
+              <select name="intent" id="formIntent">
+                <option value="仮申し込み">仮申し込み</option>
+                <option value="事前相談">事前相談</option>
+              </select>
+            </label>
             <label>会社名
               <input type="text" name="company" autocomplete="organization" required>
             </label>
@@ -2024,9 +2032,9 @@
           </div>
           <button class="button primary form-submit" type="submit">仮申し込み内容を送る</button>
           <div class="entry-subactions">
-            <a class="entry-mail" href="mailto:jimuco@pasotaro.com?cc=pasotaro@pasotaro.com&subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">まだ迷っている方は相談メールを送る</a>
+            <button class="entry-mail" type="button" id="consultationButton">まだ迷っている方はフォームで相談する</button>
           </div>
-          <p class="form-note" id="formStatus">送信すると、仮申し込み内容が事務局とパソコン太郎に届きます。送れない場合は、下の相談メールから同じ内容をお送りください。</p>
+          <p class="form-note" id="formStatus">送信すると、内容が事務局とパソコン太郎に届きます。メールソフトは開かず、このページ内のフォームから送れます。</p>
         </form>
       </div>
     </section>
@@ -2077,6 +2085,9 @@
     const preEntryForm = document.getElementById("preEntryForm");
     const formStatus = document.getElementById("formStatus");
     const formNext = document.getElementById("formNext");
+    const formSubject = document.getElementById("formSubject");
+    const formIntent = document.getElementById("formIntent");
+    const consultationButton = document.getElementById("consultationButton");
     const GEMINI_CHAT_ENDPOINT = window.PASOTARO_GEMINI_CHAT_ENDPOINT || "";
     const GEMINI_API_KEY = window.PASOTARO_GEMINI_API_KEY || "";
     const GEMINI_MODEL = window.PASOTARO_GEMINI_MODEL || "gemini-2.5-flash";
@@ -2131,12 +2142,35 @@
       entry.addEventListener("click", () => toggleChat(false));
       cta.appendChild(entry);
       const mail = document.createElement("a");
-      mail.href = "mailto:jimuco@pasotaro.com?cc=pasotaro@pasotaro.com&subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A";
+      mail.href = "#entry";
       mail.className = "secondary";
-      mail.textContent = "相談メールを送る";
+      mail.textContent = "フォームで相談する";
+      mail.addEventListener("click", () => {
+        toggleChat(false);
+        setFormIntent("事前相談", { scroll: true, focusMessage: true });
+      });
       cta.appendChild(mail);
       chatLog.appendChild(cta);
       chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function setFormIntent(intent, options = {}) {
+      const { scroll = false, focusMessage = false } = options;
+      if (formIntent) formIntent.value = intent;
+      if (formSubject) formSubject.value = `パソコン太郎メゾットAI講習会 初級編 ${intent}`;
+      const submitButton = preEntryForm.querySelector(".form-submit");
+      if (submitButton) submitButton.textContent = intent === "事前相談" ? "相談内容を送る" : "仮申し込み内容を送る";
+      if (formStatus) {
+        formStatus.textContent = intent === "事前相談"
+          ? "事前相談として送信します。メールソフトは開かず、このページ内のフォームから事務局とパソコン太郎に届きます。"
+          : "送信すると、内容が事務局とパソコン太郎に届きます。メールソフトは開かず、このページ内のフォームから送れます。";
+      }
+      if (scroll) preEntryForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (focusMessage) {
+        window.setTimeout(() => {
+          preEntryForm.querySelector('textarea[name="message"]')?.focus();
+        }, 350);
+      }
     }
 
     function updateChoiceVisibility() {
@@ -2317,8 +2351,17 @@
       answerChat(question);
     });
 
+    formIntent.addEventListener("change", () => {
+      setFormIntent(formIntent.value);
+    });
+
+    consultationButton.addEventListener("click", () => {
+      setFormIntent("事前相談", { focusMessage: true });
+    });
+
     preEntryForm.addEventListener("submit", (event) => {
       const data = new FormData(preEntryForm);
+      setFormIntent(data.get("intent") || "仮申し込み");
       const participants = Number(data.get("participants") || 0);
       if (participants < 1 || participants > 4) {
         event.preventDefault();

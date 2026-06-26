@@ -995,6 +995,7 @@
     }
     .chat-msg.bot { background: #ffffff; border: 1px solid var(--line); }
     .chat-msg.user { justify-self: end; color: #ffffff; background: var(--red); }
+    .chat-msg.pending { color: var(--muted); }
     .chat-actions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1033,6 +1034,10 @@
       font-weight: 900;
       cursor: pointer;
       white-space: nowrap;
+    }
+    .chat-send:disabled {
+      opacity: 0.58;
+      cursor: wait;
     }
     .chat-cta {
       justify-self: start;
@@ -2018,14 +2023,14 @@
   </main>
 
   <button class="chat-launch" type="button" id="chatLaunch" aria-controls="entryChat" aria-expanded="false">
-    <span class="chat-launch-main">申込前チャット</span>
+    <span class="chat-launch-main">AI申込前チャット</span>
     <span class="chat-launch-sub">質問できます</span>
   </button>
   <aside class="chat-panel" id="entryChat" aria-label="講習会申込前チャット">
     <div class="chat-head">
       <div>
-        <strong>第1期の申込前チャット</strong>
-        <span>仮申し込み前の不安を整理します</span>
+        <strong>第1期の申込前AIチャット</strong>
+        <span>仮申し込み前の不安に答えます</span>
       </div>
       <button class="chat-close" type="button" id="chatClose" aria-label="チャットを閉じる">×</button>
     </div>
@@ -2052,6 +2057,7 @@
   <footer>
     <div class="container">© ITSupportパソコン太郎株式会社 / パソコン太郎メゾットAI講習会 初級編</div>
   </footer>
+  <script src="assets/chat-config.js"></script>
   <script>
     const chatLaunch = document.getElementById("chatLaunch");
     const chatClose = document.getElementById("chatClose");
@@ -2062,7 +2068,18 @@
     const preEntryForm = document.getElementById("preEntryForm");
     const formStatus = document.getElementById("formStatus");
     const formNext = document.getElementById("formNext");
-    const chatAnswers = {
+    const GEMINI_CHAT_ENDPOINT = window.PASOTARO_GEMINI_CHAT_ENDPOINT || "";
+    const CHAT_API_TIMEOUT_MS = 12000;
+    const chatQuestions = {
+      fit: "どんな会社でも2日間で本当に使えるWebアプリを作れますか？",
+      subsidy: "助成金を使うと実質いくらくらいで受けられますか？給与分の補助もありますか？",
+      file: "2日目に持ち込むファイルは何がいいですか？",
+      track: "パソコン太郎本人の実績を教えてください。",
+      pasotaro: "第1期はパソコン太郎本人がメイン講師ですか？",
+      party: "懇親会はありますか？",
+      prepare: "参加条件と事前準備を教えてください。"
+    };
+    const fallbackAnswers = {
       fit: "業務に使っているExcel、PDF、マニュアル、日報、問い合わせ履歴などが1つでもあれば候補になります。2日で作れる範囲に絞るので、まずは「会社でよく聞かれること」「毎回同じ判断をしていること」から始めるのがおすすめです。その条件なら成果物候補になりやすいので、まず仮申し込みで枠を押さえて、どのファイルから始めるか一緒に確認してください。",
       subsidy: "中小企業の場合、研修費40万円に対して最大30万円の経費助成、さらに13時間分で13,000円の賃金助成が対象候補です。支給保証ではないため、顧問社労士または管轄労働局への事前確認が必要です。開催日は2026年10月15日(木)・16日(金)なので、助成金を検討する会社ほど先に仮申し込みで研修枠と確認事項を押さえるのがおすすめです。",
       file: "おすすめは、すでに業務で使っているExcel、PDF、マニュアル、料金表、日報、問い合わせ履歴です。個人情報や機密情報は匿名化・サンプル化してください。仮申し込み後に、どのファイルが成果物になりやすいか一緒に整理します。迷う場合も、まず仮申し込みで候補を出してもらえればこちらで絞れます。",
@@ -2084,6 +2101,13 @@
       message.textContent = text;
       chatLog.appendChild(message);
       chatLog.scrollTop = chatLog.scrollHeight;
+      return message;
+    }
+
+    function replaceMessage(message, text, type = "bot") {
+      message.className = `chat-msg ${type}`;
+      message.textContent = text;
+      chatLog.scrollTop = chatLog.scrollHeight;
     }
 
     function addChatCta() {
@@ -2099,18 +2123,61 @@
       chatLog.scrollTop = chatLog.scrollHeight;
     }
 
-    function resolveChatAnswer(text) {
-      if (/助成金|補助|金額|費用|いくら|10万|賃金|給与/.test(text)) return chatAnswers.subsidy;
-      if (/本人|太郎|講師|登壇|メイン|直接/.test(text)) return chatAnswers.pasotaro;
-      if (/実績|すご|経歴|誰|官公庁|銀行|教育|議員|ホリエモン|出版/.test(text)) return chatAnswers.track;
-      if (/ファイル|Excel|エクセル|PDF|資料|データ|持ち込み|何を/.test(text)) return chatAnswers.file;
-      if (/準備|必要|パソコン|PC|Chrome|Google|アカウント|カード|メモリ/.test(text)) return chatAnswers.prepare;
-      if (/懇親|交流|飲み|夜|5000/.test(text)) return chatAnswers.party;
+    function resolveFallbackAnswer(text) {
+      if (/助成金|補助|金額|費用|いくら|10万|賃金|給与/.test(text)) return fallbackAnswers.subsidy;
+      if (/本人|太郎|講師|登壇|メイン|直接/.test(text)) return fallbackAnswers.pasotaro;
+      if (/実績|すご|経歴|誰|官公庁|銀行|教育|議員|ホリエモン|出版/.test(text)) return fallbackAnswers.track;
+      if (/ファイル|Excel|エクセル|PDF|資料|データ|持ち込み|何を/.test(text)) return fallbackAnswers.file;
+      if (/準備|必要|パソコン|PC|Chrome|Google|アカウント|カード|メモリ/.test(text)) return fallbackAnswers.prepare;
+      if (/懇親|交流|飲み|夜|5000/.test(text)) return fallbackAnswers.party;
       if (/日程|いつ|場所|宇都宮|10月|15|16|人数|何人|4名|12人/.test(text)) {
         return "第1期は2026年10月15日(木)・16日(金)、宇都宮開催です。最大12人限定、1社4名までで、パソコン太郎本人が2日間メイン講師を務めます。人数が埋まる前に、仮申し込みで参加枠を押さえてから条件確認に進むのがおすすめです。";
       }
-      if (/作れ|でき|アプリ|ソフト|Web|社内|URL|運用/.test(text)) return chatAnswers.fit;
+      if (/作れ|でき|アプリ|ソフト|Web|社内|URL|運用/.test(text)) return fallbackAnswers.fit;
       return fallbackAnswer;
+    }
+
+    function setComposerBusy(busy) {
+      chatComposer.querySelector(".chat-send").disabled = busy;
+      chatText.disabled = busy;
+      document.querySelectorAll("[data-chat]").forEach((button) => {
+        button.disabled = busy;
+      });
+    }
+
+    async function askGeminiChat(question) {
+      if (!GEMINI_CHAT_ENDPOINT) throw new Error("Gemini chat endpoint is not configured.");
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), CHAT_API_TIMEOUT_MS);
+      try {
+        const response = await fetch(GEMINI_CHAT_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: question, page: "pasotaro-method-lp" }),
+          signal: controller.signal
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.answer) throw new Error(data.error || "Chat API error.");
+        return String(data.answer).trim();
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
+    async function answerChat(question, fallbackKey) {
+      addMessage(question, "user");
+      const pending = addMessage("AIが確認しています。少しお待ちください。", "bot pending");
+      setComposerBusy(true);
+      try {
+        const answer = await askGeminiChat(question);
+        replaceMessage(pending, answer || resolveFallbackAnswer(question));
+      } catch (error) {
+        replaceMessage(pending, resolveFallbackAnswer(fallbackKey ? chatQuestions[fallbackKey] : question));
+      } finally {
+        setComposerBusy(false);
+        addChatCta();
+        chatText.focus();
+      }
     }
 
     chatLaunch.addEventListener("click", () => toggleChat(!chatPanel.classList.contains("open")));
@@ -2121,9 +2188,7 @@
     document.querySelectorAll("[data-chat]").forEach((button) => {
       button.addEventListener("click", () => {
         const key = button.getAttribute("data-chat");
-        addMessage(button.textContent, "user");
-        addMessage(chatAnswers[key], "bot");
-        addChatCta();
+        answerChat(chatQuestions[key] || button.textContent, key);
       });
     });
 
@@ -2131,10 +2196,8 @@
       event.preventDefault();
       const question = chatText.value.trim();
       if (!question) return;
-      addMessage(question, "user");
-      addMessage(resolveChatAnswer(question), "bot");
-      addChatCta();
       chatText.value = "";
+      answerChat(question);
     });
 
     preEntryForm.addEventListener("submit", (event) => {

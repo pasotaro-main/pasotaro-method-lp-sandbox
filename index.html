@@ -1,0 +1,2050 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>パソコン太郎メゾットAI講習会 初級編 | 2日で社内Webアプリを2本持ち帰るAI実装合宿</title>
+  <meta name="description" content="2026年10月7日(水)・8日(木)宇都宮開催・第1期最大12人限定。パソコン太郎本人が2日間メイン講師を務め、会社全員がURLで使えるAI業務Webアプリを2日で2本持ち帰る、中小企業向けAI実装研修。">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --red: #d9152b;
+      --red-dark: #a80f20;
+      --ink: #111214;
+      --text: #25272b;
+      --muted: #5e626b;
+      --line: #dddddd;
+      --paper: #ffffff;
+      --soft: #f6f7f9;
+      --warm: #fff7ea;
+      --green: #138257;
+      --green-soft: #e9f6ef;
+      --blue: #2364d2;
+      --blue-soft: #eef5ff;
+      --gold: #b8750b;
+      --shadow: 0 22px 60px rgba(18, 20, 24, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.72;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    strong { color: var(--ink); }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      background: rgba(17, 18, 20, 0.9);
+      color: #ffffff;
+      backdrop-filter: blur(14px);
+    }
+    .nav {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: grid;
+      gap: 2px;
+      min-width: 220px;
+      line-height: 1.25;
+    }
+    .brand b { font-size: 15px; letter-spacing: 0; }
+    .brand span { color: rgba(255,255,255,0.68); font-size: 12px; font-weight: 700; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: rgba(255,255,255,0.82);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-weight: 900;
+      line-height: 1.25;
+      text-align: center;
+    }
+    .button.primary {
+      color: #ffffff;
+      background: var(--red);
+      box-shadow: 0 12px 28px rgba(217, 21, 43, 0.28);
+    }
+    .button.light {
+      color: var(--red);
+      background: #ffffff;
+      border-color: #ffffff;
+    }
+    .button.ghost {
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.62);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 70svh;
+      color: #ffffff;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(10,10,12,0.9) 0%, rgba(10,10,12,0.72) 43%, rgba(10,10,12,0.28) 72%, rgba(10,10,12,0.16) 100%),
+        linear-gradient(0deg, rgba(10,10,12,0.7) 0%, rgba(10,10,12,0) 36%),
+        url("assets/ai-bootcamp-hero.jpg") center / cover no-repeat;
+    }
+    .hero-content { padding: 42px 0 36px; }
+    .hero-main { max-width: 790px; }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      padding: 7px 11px;
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 999px;
+      background: rgba(217, 21, 43, 0.92);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+    h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: clamp(34px, 4.9vw, 52px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h1 span { display: block; }
+    .hero-sub {
+      margin: 14px 0 0;
+      max-width: 720px;
+      color: rgba(255,255,255,0.96);
+      font-size: clamp(19px, 2.3vw, 24px);
+      line-height: 1.38;
+      font-weight: 900;
+    }
+    .hero-copy {
+      margin: 14px 0 0;
+      max-width: 720px;
+      color: rgba(255,255,255,0.82);
+      font-size: 16px;
+      line-height: 1.68;
+    }
+    .hero-person {
+      max-width: 760px;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border: 1px solid rgba(255,255,255,0.34);
+      border-radius: 8px;
+      background: rgba(24, 25, 29, 0.52);
+      box-shadow: 0 16px 42px rgba(0,0,0,0.18);
+    }
+    .hero-person strong {
+      display: block;
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.42;
+    }
+    .hero-person span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255,255,255,0.82);
+      font-size: 14px;
+      line-height: 1.68;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .hero-facts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 980px;
+      margin-top: 42px;
+    }
+    .hero-facts div {
+      min-height: 86px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.11);
+      backdrop-filter: blur(8px);
+    }
+    .hero-facts strong {
+      display: block;
+      color: #ffffff;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+    .hero-facts span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255,255,255,0.72);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    section { padding: 80px 0; }
+    .band { background: var(--soft); }
+    .warm { background: var(--warm); }
+    .dark { background: #18191d; color: #ffffff; }
+    .section-head { max-width: 850px; margin-bottom: 34px; }
+    .label {
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .dark .label { color: #ff6b7a; }
+    h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    .dark h2 { color: #ffffff; }
+    .lead {
+      margin: 15px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .dark .lead { color: rgba(255,255,255,0.72); }
+
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: 16px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      background: #ffffff;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 20px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .card ul { margin: 12px 0 0; padding-left: 1.2em; }
+    .card li { margin: 6px 0; color: var(--muted); }
+    .redline { border-left: 7px solid var(--red); }
+    .greenline { border-left: 7px solid var(--green); }
+    .blueline { border-left: 7px solid var(--blue); }
+
+    .subsidy-hero {
+      padding: 34px 0;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+    .subsidy-row {
+      display: grid;
+      grid-template-columns: 1.05fr 1.25fr;
+      align-items: center;
+      gap: 24px;
+    }
+    .subsidy-row h2 { font-size: clamp(26px, 3vw, 34px); }
+    .calc {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .calc div {
+      min-height: 112px;
+      padding: 18px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: center;
+      gap: 4px;
+    }
+    .calc div:last-child { border-right: 0; }
+    .calc strong {
+      display: block;
+      color: var(--red);
+      font-size: 28px;
+      line-height: 1.1;
+    }
+    .calc span { color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .small-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .proof-grid { margin-bottom: 16px; }
+
+    .experience-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+      gap: 30px;
+      align-items: center;
+    }
+    .experience-media {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: #ffffff;
+    }
+    .experience-media img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+    .experience-copy .section-head { margin-bottom: 20px; }
+    .mini-flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .mini-step {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+    .mini-step b {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 13px;
+    }
+    .mini-step strong { display: block; color: var(--ink); line-height: 1.35; }
+    .mini-step span { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+    .about-profile {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.25fr);
+      gap: 30px;
+      align-items: center;
+    }
+    .profile-photo-card {
+      position: relative;
+      min-height: 520px;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(24,25,29,0.18), rgba(24,25,29,0.92)),
+        radial-gradient(circle at 55% 25%, rgba(217,21,43,0.18), transparent 42%),
+        #191a1e;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .profile-photo {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: auto;
+      height: 108%;
+      max-width: none;
+      transform: translateX(-50%);
+      object-fit: contain;
+    }
+    .profile-caption {
+      position: relative;
+      z-index: 1;
+      padding: 18px;
+      color: #ffffff;
+      background: linear-gradient(180deg, rgba(24,25,29,0), rgba(24,25,29,0.82));
+    }
+    .profile-caption strong {
+      display: block;
+      color: #ffffff;
+      font-size: 22px;
+      line-height: 1.3;
+    }
+    .profile-caption span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255,255,255,0.76);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .about-profile .grid-3 {
+      grid-template-columns: 1fr;
+      margin-top: 18px;
+    }
+    .profile-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .profile-point {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--soft);
+    }
+    .profile-point strong {
+      display: block;
+      color: var(--red);
+      font-size: 18px;
+      line-height: 1.2;
+    }
+    .profile-point span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin-top: 4px;
+    }
+
+    .section-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 24px;
+      padding: 17px 18px;
+      border: 1px solid #f0c3ca;
+      border-radius: 8px;
+      background: #fff9fa;
+    }
+    .section-cta strong {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+    .section-cta span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .section-cta .button { flex-shrink: 0; }
+    .subsidy-row .section-cta {
+      grid-column: 1 / -1;
+      margin-top: 0;
+    }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .stat {
+      padding: 26px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+    .stat strong {
+      display: block;
+      color: var(--red);
+      font-size: 44px;
+      line-height: 1;
+    }
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .compare .before { background: #fff4f4; border-color: #efb8bf; }
+    .compare .after { background: var(--green-soft); border-color: #acd7c3; }
+
+    .app-map {
+      display: grid;
+      grid-template-columns: minmax(270px, 0.9fr) minmax(0, 1.1fr);
+      gap: 28px;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .app-screen {
+      padding: 22px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+    .browser-bar {
+      height: 28px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 9px;
+      margin-bottom: 16px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: #cbd5e1; }
+    .mock-title {
+      height: 26px;
+      width: 72%;
+      border-radius: 6px;
+      background: #111214;
+      margin-bottom: 14px;
+    }
+    .mock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .mock-box {
+      min-height: 82px;
+      border-radius: 8px;
+      background: var(--blue-soft);
+      border: 1px solid #cfe0ff;
+      padding: 12px;
+    }
+    .mock-box:nth-child(2) { background: var(--green-soft); border-color: #c8e8d7; }
+    .mock-box:nth-child(3) { grid-column: 1 / -1; background: #fff4f4; border-color: #efc0c6; }
+    .mock-line { height: 9px; border-radius: 99px; background: rgba(17,18,20,0.18); margin-bottom: 9px; }
+    .mock-line.short { width: 52%; }
+    .parts {
+      display: grid;
+      gap: 12px;
+    }
+    .part {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+    .part b {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 14px;
+    }
+    .part strong { display: block; font-size: 17px; line-height: 1.35; }
+    .part span { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .day {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    .day-head {
+      padding: 18px 22px;
+      color: #ffffff;
+      background: var(--ink);
+    }
+    .day-head span {
+      display: block;
+      color: rgba(255,255,255,0.72);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .day-head h3 { margin: 4px 0 0; font-size: 24px; line-height: 1.25; }
+    .steps { margin: 0; padding: 0; list-style: none; }
+    .steps li {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--line);
+    }
+    .steps b {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 13px;
+    }
+    .steps strong { display: block; color: var(--ink); line-height: 1.4; }
+    .steps span { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
+
+    .price-box {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+    .price-main {
+      padding: 28px;
+      border: 2px solid var(--red);
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .price {
+      margin: 12px 0 8px;
+      color: var(--red);
+      font-size: 44px;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+    .deliverables {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .requirements {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .req {
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 8px;
+      padding: 18px;
+      background: rgba(255,255,255,0.06);
+    }
+    .req strong {
+      display: block;
+      color: #ffffff;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+    .req span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255,255,255,0.72);
+      font-size: 13px;
+    }
+
+    .subsidy-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+    table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 15px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    th { background: #fff4f4; color: var(--ink); font-weight: 900; }
+    tr:last-child td { border-bottom: 0; }
+    td strong { color: var(--red); font-size: 18px; }
+    .notice {
+      margin-top: 16px;
+      padding: 18px;
+      border: 1px solid #efc1c7;
+      border-radius: 8px;
+      background: #fff8f8;
+      color: #4b252a;
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .fold-panel {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    .fold-panel > summary,
+    .qa > summary {
+      list-style: none;
+      cursor: pointer;
+      color: var(--ink);
+      font-weight: 900;
+      line-height: 1.45;
+    }
+    .fold-panel > summary::-webkit-details-marker,
+    .qa > summary::-webkit-details-marker { display: none; }
+    .fold-panel > summary {
+      position: relative;
+      padding: 18px 54px 18px 20px;
+      font-size: 17px;
+      background: #fff9fa;
+    }
+    .fold-panel > summary::after,
+    .qa > summary::after {
+      content: "+";
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .fold-panel[open] > summary::after,
+    .qa[open] > summary::after { content: "-"; }
+    .fold-body {
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+    .fold-body .subsidy-table-wrap { border-radius: 8px; }
+    .fold-body .notice { margin-bottom: 0; }
+    .digest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .digest {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #ffffff;
+    }
+    .digest strong {
+      display: block;
+      color: var(--red);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+    .digest span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .faq { display: grid; gap: 12px; }
+    .qa {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+    .qa > summary {
+      position: relative;
+      padding: 18px 54px 18px 20px;
+      font-size: 18px;
+    }
+    .qa p {
+      margin: 0;
+      padding: 0 20px 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .cta {
+      padding: 62px 0;
+      color: #ffffff;
+      background:
+        linear-gradient(90deg, rgba(168,15,32,0.98), rgba(217,21,43,0.94)),
+        url("assets/ai-bootcamp-hero.jpg") center / cover no-repeat;
+    }
+    .cta-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+    }
+    .cta h2 { color: #ffffff; }
+    .cta p { margin: 10px 0 0; color: rgba(255,255,255,0.82); }
+    .entry-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1.15fr);
+      gap: 30px;
+      align-items: start;
+    }
+    .entry-copy { padding-top: 10px; }
+    .entry-copy .label { color: #ffffff; }
+    .entry-note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .entry-form {
+      padding: 22px;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 22px 60px rgba(17,18,20,0.22);
+      color: var(--ink);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .entry-form label {
+      display: grid;
+      gap: 6px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+    .entry-form label.wide { grid-column: 1 / -1; }
+    .entry-form input,
+    .entry-form select,
+    .entry-form textarea {
+      width: 100%;
+      border: 1px solid #cfd3da;
+      border-radius: 8px;
+      padding: 11px 12px;
+      color: var(--ink);
+      background: #ffffff;
+      font: inherit;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .entry-form textarea { resize: vertical; min-height: 112px; }
+    .entry-form input:focus,
+    .entry-form select:focus,
+    .entry-form textarea:focus {
+      outline: 3px solid rgba(217, 21, 43, 0.18);
+      border-color: var(--red);
+    }
+    .form-submit {
+      width: 100%;
+      margin-top: 16px;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+    .entry-subactions {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .entry-mail {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 12px;
+      border: 1px solid #d7dbe2;
+      border-radius: 8px;
+      color: var(--ink);
+      background: #ffffff;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .entry-mail:hover { border-color: var(--red); color: var(--red); }
+    .form-note {
+      margin: 12px 0 0;
+      color: var(--muted) !important;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    .chat-launch {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 60;
+      width: 178px;
+      min-height: 66px;
+      display: grid;
+      align-content: center;
+      gap: 2px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 8px;
+      color: #ffffff;
+      background: var(--red);
+      box-shadow: 0 16px 36px rgba(17,18,20,0.24);
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: left;
+    }
+    .chat-launch-main {
+      display: block;
+      font-size: 18px;
+      line-height: 1.15;
+    }
+    .chat-launch-sub {
+      display: block;
+      color: rgba(255,255,255,0.78);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .chat-panel {
+      position: fixed;
+      right: 22px;
+      bottom: 88px;
+      z-index: 61;
+      width: min(380px, calc(100vw - 32px));
+      max-height: min(620px, calc(100vh - 120px));
+      display: none;
+      grid-template-rows: auto 1fr auto;
+      border: 1px solid rgba(17,18,20,0.16);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 24px 70px rgba(17,18,20,0.26);
+    }
+    .chat-panel.open { display: grid; }
+    .chat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      color: #ffffff;
+      background: #18191d;
+    }
+    .chat-head strong { display: block; color: #ffffff; line-height: 1.3; }
+    .chat-head span { display: block; color: rgba(255,255,255,0.72); font-size: 12px; }
+    .chat-close {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 8px;
+      color: #ffffff;
+      background: transparent;
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .chat-log {
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      padding: 16px;
+      overflow: auto;
+      background: #f6f7f9;
+    }
+    .chat-msg {
+      max-width: 92%;
+      padding: 11px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .chat-msg.bot { background: #ffffff; border: 1px solid var(--line); }
+    .chat-msg.user { justify-self: end; color: #ffffff; background: var(--red); }
+    .chat-actions {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+    .chat-choice {
+      width: 100%;
+      min-height: 40px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: #ffffff;
+      font: inherit;
+      font-weight: 800;
+      text-align: left;
+      cursor: pointer;
+    }
+    .chat-choice:hover { border-color: var(--red); }
+    .chat-entry {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      color: #ffffff;
+      background: var(--red);
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .chat-entry.secondary {
+      color: var(--ink);
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+    .chat-entry.secondary:hover { border-color: var(--red); color: var(--red); }
+    footer {
+      padding: 34px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .nav { min-height: 62px; }
+      .brand span { display: none; }
+      .nav-links a:not(.button) { display: none; }
+      .hero {
+        min-height: auto;
+        background-position: 64% center;
+      }
+      .hero-content { padding: 72px 0 46px; }
+      .hero-main { max-width: 100%; }
+      .kicker { max-width: 100%; border-radius: 8px; font-size: 12px; }
+      h1 { font-size: 32px; line-height: 1.12; }
+      .hero-copy { font-size: 15px; }
+      .hero-actions .button { width: 100%; }
+      .hero-person { padding: 14px; }
+      .hero-facts,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .subsidy-row,
+      .calc,
+      .stat-strip,
+      .compare,
+      .experience-panel,
+      .about-profile,
+      .profile-points,
+      .app-map,
+      .timeline,
+      .digest-grid,
+      .price-box,
+      .deliverables,
+      .requirements,
+      .cta-row,
+      .entry-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-facts { display: none; }
+      .calc div { border-right: 0; border-bottom: 1px solid var(--line); min-height: auto; }
+      .calc div:last-child { border-bottom: 0; }
+      section { padding: 58px 0; }
+      .subsidy-hero { padding: 28px 0; }
+      .experience-panel { gap: 22px; }
+      .profile-photo-card { min-height: 440px; }
+      .profile-photo { height: 104%; }
+      .price { font-size: 36px; }
+      .cta-row .button { width: 100%; }
+      .section-cta {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .section-cta .button { width: 100%; }
+      .chat-launch {
+        right: 16px;
+        bottom: 14px;
+        width: 198px;
+        min-height: 62px;
+        text-align: left;
+      }
+      .chat-panel {
+        right: 16px;
+        bottom: 86px;
+        width: calc(100vw - 32px);
+        max-height: min(620px, calc(100vh - 96px));
+      }
+    }
+    @media (max-width: 600px) {
+      .profile-photo-card { min-height: 360px; }
+      .profile-caption strong { font-size: 18px; }
+      .fold-panel > summary,
+      .qa > summary { padding-right: 48px; }
+      .chat-launch {
+        left: 16px;
+        right: 16px;
+        width: auto;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#">
+        <b>パソコン太郎メゾットAI講習会</b>
+        <span>初級編 / 2026年10月7日(水)・8日(木) / 宇都宮</span>
+      </a>
+      <nav class="nav-links" aria-label="主要メニュー">
+        <a href="#subsidy">助成金</a>
+        <a href="#outline">概要</a>
+        <a href="#difference">違い</a>
+        <a href="#proof">実績</a>
+        <a href="#about">パソコン太郎とは</a>
+        <a href="#flow">2日間の流れ</a>
+        <a href="#timetable">時間割</a>
+        <a href="#qa">Q&A</a>
+        <a class="button primary" href="#entry">仮申し込み</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-main">
+          <p class="kicker">第1期 2026年10月7日(水)・8日(木) 宇都宮開催 / 最大12人限定 / 助成金活用型</p>
+          <h1><span>パソコン太郎メゾットAI</span><span>講習会 初級編</span></h1>
+          <p class="hero-sub">5大メゾットで、2日で会社全員がURLで使えるAI業務アプリを2本持ち帰る。</p>
+          <p class="hero-copy">AIを勉強して終わる研修ではありません。1本目は全員共通のAI業務アプリ、2本目は御社のファイルから作る自社用アプリ。ログイン、データ保存、AI接続、社内共有URLまで、会社で使うことを前提に作ります。</p>
+          <div class="hero-person">
+            <strong>第1期だけの特別体制。パソコン太郎本人が2日間のメイン講師として、講義、見立て、制作の判断、まとめまで担当します。</strong>
+            <span>2日目夜の懇親会にも本人が参加します。今後は本人以外の講師が担当する可能性があります。仮申し込みは本申込ではありません。参加可否、助成金、持ち込みファイルを確認してから確定します。</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="#entry">第1期に仮申し込みする</a>
+            <a class="button ghost" href="#subsidy">助成金活用の目安を見る</a>
+          </div>
+          <div class="hero-facts" aria-label="講習会の重要情報">
+            <div><strong>10/7・8</strong><span>2026年 水曜・木曜、宇都宮で開催</span></div>
+            <div><strong>本人がメイン講師</strong><span>講義、見立て、制作判断、懇親会まで担当</span></div>
+            <div><strong>官公庁・金融</strong><span>教育委員会、自治体、金融機関等でAI講習</span></div>
+            <div><strong>2日で2本</strong><span>会社全員がURLで使えるWebアプリを持ち帰る</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="subsidy" class="subsidy-hero">
+      <div class="container subsidy-row">
+        <div>
+          <div class="label">RESKILLING SUBSIDY</div>
+          <h2>中小企業なら、研修費40万円に対して最大30万円助成の対象候補に。</h2>
+          <p class="small-note">人材開発支援助成金「事業展開等リスキリング支援コース」を想定した設計です。助成金は後払いで、支給保証ではありません。</p>
+        </div>
+        <div class="calc" aria-label="中小企業の助成金活用目安">
+          <div><span>研修費</span><strong>40万円</strong><span>1人あたり</span></div>
+          <div><span>経費助成</span><strong>最大30万円</strong><span>75%目安</span></div>
+          <div><span>実質負担</span><strong>10万円目安</strong><span>受講料部分</span></div>
+          <div><span>賃金助成</span><strong>13,000円</strong><span>13時間×1,000円目安</span></div>
+        </div>
+        <div class="section-cta">
+          <div>
+            <strong>助成金を検討する会社ほど、先に枠と確認事項を押さえてください。</strong>
+            <span>仮申し込み後に、対象可否、社労士確認、持ち込みファイルを整理してから本申込へ進みます。</span>
+          </div>
+          <a class="button primary" href="#entry">この内容なら仮申し込みしておく</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="outline">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">FIRST CLASS OUTLINE</div>
+          <h2>第1期は、2026年10月7日(水)・8日(木)に宇都宮で開催。最大12人だけで、2本の社内アプリを作り切ります。</h2>
+          <p class="lead">大人数のセミナーではなく、講師と補助スタッフが画面を見ながら進める実装研修です。作った人だけで終わらせず、会社全員がURLで使える状態を目指します。</p>
+        </div>
+        <div class="grid-3">
+          <div class="card redline"><h3>開催日・開催地</h3><p>2026年10月7日(水)・8日(木)、宇都宮開催。具体会場は受講確定後に案内します。</p></div>
+          <div class="card redline"><h3>定員</h3><p>第1期は最大12人限定。質問と画面確認ができる人数に絞ります。</p></div>
+          <div class="card redline"><h3>受講料</h3><p>1人40万円。助成金活用を希望する会社は事前確認が必要です。</p></div>
+          <div class="card redline"><h3>時間</h3><p>2日間、休憩を除く標準13時間前後のOFF-JT研修として設計します。</p></div>
+          <div class="card redline"><h3>対象</h3><p>社長、幹部、総務、現場責任者、社内DX担当など、業務を知っている人。</p></div>
+          <div class="card redline"><h3>持ち帰るもの</h3><p>共通アプリ、自社アプリ、社内共有URL、作成データ、改善履歴、次に作る手順。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="warm">
+      <div class="container experience-panel">
+        <div class="experience-media">
+          <img src="assets/ai-workshop-scene.jpg" alt="ノートパソコンを使ってAI業務アプリを作る少人数講習会のイメージ">
+        </div>
+        <div class="experience-copy">
+          <div class="section-head">
+            <div class="label">2 DAYS OUTPUT</div>
+            <h2>2日後に残るのは、資料ではなく「社員がURLで使えるWebアプリ」です。</h2>
+            <p class="lead">聞いて終わる講習ではありません。全員で同じ型を体験し、御社ファイルを1つ選び、質問表と音声で判断基準を足し、会社で試せる形にして持ち帰ります。</p>
+          </div>
+          <div class="mini-flow" aria-label="2日間で作る流れ">
+            <div class="mini-step"><b>1</b><div><strong>会社で使う構造を知る</strong><span>画面、ログイン、保存、AI接続、社内共有の全体像をつかむ</span></div></div>
+            <div class="mini-step"><b>2</b><div><strong>共通アプリを公開する</strong><span>全員でAI日報タイムカードを作り、1本目をURLで触れる状態にする</span></div></div>
+            <div class="mini-step"><b>3</b><div><strong>自社ファイルで仕上げる</strong><span>2日目は御社のファイルと録音した判断基準から専用アプリを作る</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="difference" class="band">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">NOT JUST AI STUDY</div>
+          <h2>普通のAI講習会との違いは、「会社で使うところ」まで作ることです。</h2>
+          <p class="lead">多くのAI講座は、便利な使い方やプロンプトで終わります。パソコン太郎メゾットAI講習会は、御社のファイルを1つ選び、質問表と音声で判断基準を集め、社内でURL共有できるWebアプリにします。</p>
+        </div>
+        <div class="compare">
+          <div class="card before">
+            <h3>一般的なAI講習で起きやすいこと</h3>
+            <ul>
+              <li>AIツールの紹介で終わる</li>
+              <li>プロンプトは覚えたが、業務に戻す人がいない</li>
+              <li>試作品はできても、社員が使えるURLになっていない</li>
+              <li>データ保存、ログイン、社内共有の設計が抜ける</li>
+            </ul>
+          </div>
+          <div class="card after">
+            <h3>パソコン太郎メゾットで持ち帰るもの</h3>
+            <ul>
+              <li>会社全員がURLで使えるAI業務Webアプリ</li>
+              <li>自社ファイルから作った御社専用アプリ</li>
+              <li>ログイン、保存、AI接続、改善履歴の考え方</li>
+              <li>3つ目を自分たちで作るための手順書</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="label">GOOD FIT</div>
+          <h2>この講習会が向いている会社、向いていない会社。</h2>
+          <p class="lead">誰にでも売る講習会にはしません。2日で成果物を持ち帰るため、参加前の向き不向きをはっきりさせます。</p>
+        </div>
+        <div class="compare">
+          <div class="card after">
+            <h3>向いている会社</h3>
+            <ul>
+              <li>業務に使っているExcel、PDF、マニュアルがある</li>
+              <li>社長や現場の判断基準を、AIに使わせたい</li>
+              <li>社員がURLで使える小さな社内アプリを作りたい</li>
+              <li>研修後も3つ目、4つ目を自分たちで作っていきたい</li>
+            </ul>
+          </div>
+          <div class="card before">
+            <h3>向いていない会社</h3>
+            <ul>
+              <li>AIの話を聞くだけで満足したい</li>
+              <li>自社ファイルや業務内容を一切出せない</li>
+              <li>2日で大規模な基幹システムを完成させたい</li>
+              <li>社内で使う人や運用責任者を決めるつもりがない</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="label">THREE 1000</div>
+          <h2>3つの1000から生まれた、中小企業向けの実装型メゾットです。</h2>
+          <p class="lead">ChatGPTが世の中に出てから1000日を超えた今、AIは「話題の技術」ではなく「会社で使う道具」になりました。その間にパソコン太郎は、中小企業の現場に入り、社長の相談を聞き、業務資料と音声を集め、AI社員、業務アプリ、補助金、社内運用まで試し続けてきました。その蓄積を、再現しやすい手順に落としたのが初級編です。</p>
+        </div>
+        <div class="stat-strip">
+          <div class="stat"><strong>1000日</strong><span>ChatGPT以降、現場で試し続けた実践知</span></div>
+          <div class="stat"><strong>1000万文字</strong><span>業務フロー、資料、提案、改善のデータ</span></div>
+          <div class="stat"><strong>1000時間以上</strong><span>AIコンサル音声から見えた社長と現場の判断基準</span></div>
+        </div>
+        <div class="grid-4" style="margin-top:16px;">
+          <div class="card redline"><h3>現場の相談を聞いた</h3><p>社長、幹部、現場担当者の悩みを聞き、AIで何を変えるべきかを見立ててきました。</p></div>
+          <div class="card redline"><h3>業務資料を読ませた</h3><p>Excel、PDF、マニュアル、見積、日報など、会社に眠るファイルをAI活用の材料にしてきました。</p></div>
+          <div class="card redline"><h3>AI社員とアプリを作った</h3><p>問い合わせ、日報、会議メモ、見積、社内ナレッジなど、使える形にする実験を重ねてきました。</p></div>
+          <div class="card redline"><h3>運用まで見てきた</h3><p>作って終わりではなく、誰が使うか、どう共有するか、どう改善するかまで現場で見てきました。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="proof" class="band">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">PUBLIC TRACK RECORD</div>
+          <h2>第1期で本人から学べる価値は、AIを「話す人」ではなく、AIを現場で使う形まで見てきた人から学べることです。</h2>
+          <p class="lead">パソコン太郎本人は、著名なビジネスインフルエンサーとのAI・出版プロジェクト、国会議員へのAI・ITレクチャー、教育委員会関連の講演、金融機関・商工会議所・企業向けAI講習など、相手に合わせてAIを実務に落とす仕事を積み重ねてきました。だからこの講習会は、ツール紹介ではなく「会社で使うWebアプリを作って運用する」ことに寄せています。</p>
+        </div>
+        <div class="grid-3">
+          <div class="card redline">
+            <h3>著名ビジネスインフルエンサーとのAI・出版実績</h3>
+            <p>ホリエモン出版、AIホリエモン、オフラインAIアプリなど、知識や発信をAI、出版、アプリに変えるプロジェクトに関わってきました。</p>
+          </div>
+          <div class="card redline">
+            <h3>フィジカルAIラボなど先端テーマ</h3>
+            <p>画面の中だけのAIではなく、製造業、現場、身体性、リアル空間でAIをどう使うかというテーマにも取り組んでいます。</p>
+          </div>
+          <div class="card redline">
+            <h3>議員・教育委員会関連へのAI/ITレクチャー</h3>
+            <p>国会議員へのAI・ITレクチャー、宇都宮市教育委員会関連の生成AI講演など、公共領域でもAIを分かりやすく、実務に落とす講師として登壇してきました。</p>
+          </div>
+          <div class="card blueline">
+            <h3>金融機関・銀行向けAI講習</h3>
+            <p>信用金庫、銀行、金融機関の顧客向けセミナーなど、堅い業界でも使える形でAI活用を説明してきました。</p>
+          </div>
+          <div class="card blueline">
+            <h3>商工会議所・経営者団体での講演</h3>
+            <p>中小企業の社長、後継者、幹部に向けて、AIを「明日から何に使うか」まで落とし込む講演を重ねています。</p>
+          </div>
+          <div class="card greenline">
+            <h3>プレスリリース・ニュース掲載</h3>
+            <p>出版、AI講演、業務提携、地域での取り組みは、新聞、Webニュース、プレスリリースでも発信されてきました。</p>
+          </div>
+        </div>
+        <div class="section-cta">
+          <div>
+            <strong>第1期は、本人がメイン講師として御社の見立てまで行う回です。</strong>
+            <span>今後は認定講師が中心になる可能性があります。本人から直接、御社のファイルと作るアプリの方向性を見てもらいたい会社は、まず仮申し込みで枠を押さえてください。</span>
+          </div>
+          <a class="button primary" href="#entry">本人から直接学べる第1期に仮申し込みする</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="warm">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">METHOD CONCEPT</div>
+          <h2>パソコン太郎式 5大メゾット</h2>
+          <p class="lead">詳細な手順やプロンプトは受講確定後に案内します。公開LPでは、どんな考え方で進める講習なのかだけをお伝えします。</p>
+        </div>
+        <div class="grid-3">
+          <div class="card redline"><h3>1. 会社の現場から始める</h3><p>一般論ではなく、御社の業務とファイルを題材にして進めます。</p></div>
+          <div class="card redline"><h3>2. 作って終わりにしない</h3><p>社内で共有し、実際に使うところから逆算します。</p></div>
+          <div class="card redline"><h3>3. 迷子にならない構造で進める</h3><p>画面、保存、AI、ログインなどを順番に確認しながら作ります。</p></div>
+          <div class="card redline"><h3>4. 現場の判断基準を入れる</h3><p>資料だけでは足りない経験や例外を、講習内で拾って反映します。</p></div>
+          <div class="card redline"><h3>5. 次に作れる状態で持ち帰る</h3><p>2本を作って終わりではなく、次の1本へ進める状態を目指します。</p></div>
+          <div class="card greenline"><h3>詳細は受講者向けに案内</h3><p>当日の進め方、確認ポイント、作業手順は受講確定後の講習ページで案内します。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="label">WHAT YOU BUILD</div>
+          <h2>1本目は全員共通。2本目は御社専用。どちらもAIを使う意味があるアプリにします。</h2>
+          <p class="lead">単なる入力フォームではありません。入力された内容や業務ファイルをもとに、AIが要約、確認、判断補助、返信文、次の行動を出す形にします。</p>
+        </div>
+        <div class="grid-2">
+          <div class="card blueline">
+            <h3>1本目: AI日報タイムカード</h3>
+            <p>どの会社にも必要な勤怠、日報、明日の予定を題材にします。AIが日報を要約し、抜け漏れ、注意点、次の行動を出します。共通題材なので、作成、保存、公開、社内共有の型を全員で揃えられます。</p>
+          </div>
+          <div class="card greenline">
+            <h3>2本目: 自社ファイルから作る専用アプリ</h3>
+            <p>御社のExcel、PDF、マニュアル、問い合わせ履歴などを1つ持ち込み、質問表と音声回答で不足情報を足します。2日で作れる範囲に絞り、社内で試せる形に仕上げます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">APP STRUCTURE</div>
+          <h2>1日目に、Webアプリの全体像を図解で理解してから作ります。</h2>
+          <p class="lead">専門用語を覚える講義ではありません。どこを作っているのか迷わないように、社内アプリを5つの部品に分けて進めます。</p>
+        </div>
+        <div class="app-map">
+          <div class="app-screen" aria-label="Webアプリの画面イメージ">
+            <div class="browser-bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+            <div class="mock-title"></div>
+            <div class="mock-grid">
+              <div class="mock-box"><div class="mock-line"></div><div class="mock-line short"></div></div>
+              <div class="mock-box"><div class="mock-line"></div><div class="mock-line short"></div></div>
+              <div class="mock-box"><div class="mock-line"></div><div class="mock-line"></div><div class="mock-line short"></div></div>
+            </div>
+          </div>
+          <div class="parts">
+            <div class="part"><b>1</b><div><strong>画面</strong><span>社員が入力、確認、共有する入口</span></div></div>
+            <div class="part"><b>2</b><div><strong>ログイン/パスワード</strong><span>社内利用を前提に、誰が使うかを考える</span></div></div>
+            <div class="part"><b>3</b><div><strong>データ保存</strong><span>入力内容とAI回答を後から見られるようにする</span></div></div>
+            <div class="part"><b>4</b><div><strong>処理の流れ</strong><span>ボタンを押した後に何が起きるかを決める</span></div></div>
+            <div class="part"><b>5</b><div><strong>AI接続</strong><span>業務ファイルや判断基準をもとにAIが返答する</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="label">DAY 2 STRUCTURE</div>
+          <h2>2日目は、御社ファイルと音声を使って「自社アプリに育てる流れ」を図解してから作ります。</h2>
+          <p class="lead">2本目は、ただファイルを読み込ませて終わりではありません。ファイルに書かれている情報と、社長や現場の頭の中にある判断基準を合わせて、会社で使える画面とAI回答へ戻していきます。</p>
+        </div>
+        <div class="app-map">
+          <div class="parts">
+            <div class="part"><b>1</b><div><strong>業務ファイル</strong><span>Excel、PDF、マニュアル、料金表などを1つに絞る</span></div></div>
+            <div class="part"><b>2</b><div><strong>AI質問表</strong><span>ファイルだけでは分からない例外、判断基準、言い回しを質問にする</span></div></div>
+            <div class="part"><b>3</b><div><strong>ペア録音</strong><span>2人1組で質問し、現場の判断を音声として残す</span></div></div>
+            <div class="part"><b>4</b><div><strong>アプリ反映</strong><span>入力項目、保存項目、AIへの指示、回答の出し方へ落とす</span></div></div>
+            <div class="part"><b>5</b><div><strong>改善履歴</strong><span>動作確認、修正、次に作る1本の手順まで残す</span></div></div>
+          </div>
+          <div class="app-screen" aria-label="2日目の自社アプリ化フローイメージ">
+            <div class="browser-bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+            <div class="mock-title"></div>
+            <div class="mock-grid">
+              <div class="mock-box"><div class="mock-line"></div><div class="mock-line short"></div></div>
+              <div class="mock-box"><div class="mock-line"></div><div class="mock-line short"></div></div>
+              <div class="mock-box"><div class="mock-line"></div><div class="mock-line"></div><div class="mock-line short"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container about-profile">
+        <div class="profile-photo-card">
+          <img class="profile-photo" src="assets/pasotaro-profile-current.png" alt="パソコン太郎 大房剛樹">
+          <div class="profile-caption">
+            <strong>パソコン太郎 / 大房剛樹</strong>
+            <span>第1期は本人が2日間のメイン講師を務めます。</span>
+          </div>
+        </div>
+        <div>
+          <div class="section-head">
+            <div class="label">ABOUT PASOTARO</div>
+            <h2>パソコン太郎とは、AIを中小企業の現場、著名人プロジェクト、官公庁、金融機関に通してきた実装型の会社です。</h2>
+            <p class="lead">パソコンやITの困りごとを現場で見てきた会社だから、机上のDXではなく、社長と社員が本当に使うところから逆算します。ホリエモン出版、AIホリエモン、フィジカルAIラボ、教育委員会関連の講演、金融機関向けAI講習などで培った実装感を、中小企業が2日で体験できる形にしたのがこの初級編です。</p>
+          </div>
+          <div class="profile-points" aria-label="パソコン太郎の実装実績">
+            <div class="profile-point"><strong>2011年創業</strong><span>ITの困りごとを現場で見続けてきた</span></div>
+            <div class="profile-point"><strong>1000時間以上</strong><span>AIコンサル音声から型化した判断基準</span></div>
+            <div class="profile-point"><strong>第1期本人講師</strong><span>講義、見立て、制作判断まで担当</span></div>
+          </div>
+          <div class="grid-3">
+            <div class="card redline"><h3>なぜ今やるのか</h3><p>メゾットが固まり、想像していたことが技術として実現できる段階まで来たためです。今後も変化はありますが、土台は大きく揺れにくくなりました。</p></div>
+            <div class="card redline"><h3>誰に向いているか</h3><p>社長、幹部、総務、現場責任者、社内DX担当など、業務を知っていて、会社で使う小さなアプリを作りたい人に向いています。</p></div>
+            <div class="card redline"><h3>何が違うか</h3><p>AIツールの使い方ではなく、業務ファイルと音声から、自社の判断基準をソフトに戻すところまで行う点です。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="warm">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">WHY PASOTARO</div>
+          <h2>第1期で本人から学べる価値は、肩書きではなく、現場で教え、聞き、作り続けてきた経験にあります。</h2>
+          <p class="lead">2011年の創業以来、パソコン修理、IT顧問、AIコンサル、講習会、出版、イベント、業務システムづくりまで、現場で必要なものを一つずつ形にしてきました。第1期は、その本人が2日間のメイン講師として、御社のファイルをどうアプリにするかまで一緒に見立てます。</p>
+        </div>
+        <div class="grid-4 proof-grid">
+          <div class="card redline"><h3>幼稚園生から高齢者まで教えてきた</h3><p>1000時間以上の講習会・授業を通じて、難しいITやAIを相手の理解度に合わせて伝えてきました。だから当日も、専門用語だけで置いていく進め方にはしません。</p></div>
+          <div class="card redline"><h3>NPO ITアット宇都宮の立ち上げ</h3><p>NPO ITアット宇都宮の初代理事長として、地域にITを広げる活動を立ち上げてきました。教えること、支えること、現場で使える形にすることが土台にあります。</p></div>
+          <div class="card redline"><h3>AIコンサル音声1000時間以上から型化</h3><p>今回のメゾットの土台になっているのは、AIコンサルの相談、提案、打ち合わせの音声です。聞き方、見立て、打ち手、クロージングを、再現しやすい型として整理しています。</p></div>
+          <div class="card redline"><h3>発想を事業やアプリに戻してきた</h3><p>著名なビジネスインフルエンサーとの仕事、出版、AIプロジェクト、業務アプリづくりなど、アイデアを話で終わらせず、実際に使える形へ落とし込んできました。</p></div>
+        </div>
+        <div class="grid-4">
+          <div class="card redline"><h3>ITコンサルの経験が土台</h3><p>AIだけでなく、パソコン、社内IT、業務改善、顧問対応まで見てきたから、会社の現実に合わせて「どこから作るか」を考えます。</p></div>
+          <div class="card redline"><h3>現場を見立てる</h3><p>社長の言葉、社員の困りごと、業務ファイルから、どこをアプリ化すると効果が出やすいかを整理します。入口、出口、置き場、判断者を短い質問で確認します。</p></div>
+          <div class="card redline"><h3>判断基準を聞き出す</h3><p>社長や現場が普段なんとなく判断していることを、質問と対話で引き出し、音声として残し、ソフトに反映できる材料に変えます。</p></div>
+          <div class="card redline"><h3>公的領域・金融・経営者向けにも説明</h3><p>国会議員へのAI・ITレクチャー、教育委員会、自治体、信用金庫、銀行、商工会議所、企業向け講習など、相手に合わせてAIを分かる言葉に翻訳してきました。</p></div>
+        </div>
+        <div class="section-cta">
+          <div>
+            <strong>第1期は本人がメイン講師を務める特別回です。</strong>
+            <span>2日間の研修は本人が中心となって進行し、2日目夜の懇親会にも参加します。本人の見立てを受けたい会社は、まず枠を押さえてください。</span>
+          </div>
+          <a class="button primary" href="#entry">本人から学べる第1期に仮申し込みする</a>
+        </div>
+        <p class="small-note">第2期以降は、パソコン太郎メゾットを理解した講師が担当する場合があります。第1期は本人が2日間のメイン講師を務める特別体制です。2日目夜の懇親会にも本人が参加します。懇親会は希望者参加、別途5,000円です。</p>
+      </div>
+    </section>
+
+    <section id="flow" class="band">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">2 DAYS CURRICULUM</div>
+          <h2>1日目は知識と共通アプリ。2日目は御社ファイルから専用アプリ。</h2>
+          <p class="lead">講師のレベルに依存しないよう、当日はURLで配布する講習ページを見ながら、プロンプトをコピーし、1つずつ進みます。</p>
+        </div>
+        <div class="timeline">
+          <div class="day">
+            <div class="day-head">
+              <span>DAY 1</span>
+              <h3>AIで作る全体像を理解し、共通アプリを公開する</h3>
+            </div>
+            <ol class="steps">
+              <li><b>1</b><div><strong>ゴール確認</strong><span>2日で2本作る目的、完成基準、持ち帰る成果物を共有します。</span></div></li>
+              <li><b>2</b><div><strong>基本構造の図解</strong><span>画面、ログイン、保存、処理、AI接続を順番に理解します。</span></div></li>
+              <li><b>3</b><div><strong>受講環境を準備</strong><span>Googleアカウント、Chrome、受講確定後に案内する当日環境を確認します。</span></div></li>
+              <li><b>4</b><div><strong>AI日報タイムカードを作る</strong><span>全員同じ題材で、入力、保存、AI要約、社内共有URLまで進めます。</span></div></li>
+              <li><b>5</b><div><strong>宿題を決める</strong><span>2日目に使う自社ファイルを1つ選び、目的名フォルダにまとめます。</span></div></li>
+            </ol>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span>DAY 2</span>
+              <h3>自社ファイルをもとに、改善版まで仕上げる</h3>
+            </div>
+            <ol class="steps">
+              <li><b>1</b><div><strong>作る範囲を絞る</strong><span>誰が、何を入力し、何を出力するかを決めます。</span></div></li>
+              <li><b>2</b><div><strong>AIに質問表を作らせる</strong><span>ファイルに足りない判断基準、例外、言い回しを聞く質問表を作ります。</span></div></li>
+              <li><b>3</b><div><strong>2人1組で録音する</strong><span>質問する人と答える人に分かれ、音声で判断基準を残します。</span></div></li>
+              <li><b>4</b><div><strong>自社アプリを作る</strong><span>質問表と音声回答をもとに、画面、保存項目、AI指示文へ反映します。</span></div></li>
+              <li><b>5</b><div><strong>触って直す</strong><span>社内共有URLで確認し、改善履歴と3つ目を作る手順まで残します。</span></div></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="timetable">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">TIMETABLE</div>
+          <h2>第1期 2026年10月7日(水)・8日(木)のタイムスケジュール（予定）</h2>
+          <p class="lead">下記は現時点の予定です。休憩を除く実訓練時間は、2日間合計で標準13時間前後を想定しています。第1期はパソコン太郎本人がメイン講師を務め、1日目夜は宿題の時間を確保し、2日目の研修後に本人も参加する懇親会を開催します。</p>
+        </div>
+        <div class="digest-grid">
+          <div class="digest"><strong>10/7(水) 午前</strong><span>2日間のゴール、Webアプリの全体像、本人講義</span></div>
+          <div class="digest"><strong>10/7(水) 午後</strong><span>全員共通のAI日報タイムカードを作り、URLで確認</span></div>
+          <div class="digest"><strong>10/8(木)</strong><span>自社ファイル、質問表、音声回答を使って専用アプリを制作</span></div>
+          <div class="digest"><strong>10/8(木) 夜</strong><span>本人参加の懇親会。希望者参加、別途5,000円</span></div>
+        </div>
+        <details class="fold-panel">
+          <summary>予定の詳細タイムスケジュールを見る</summary>
+          <div class="fold-body">
+            <div class="subsidy-table-wrap" aria-label="第1期タイムスケジュール予定">
+              <table>
+                <thead>
+                  <tr>
+                    <th>日程</th>
+                    <th>時間</th>
+                    <th>内容</th>
+                    <th>ゴール</th>
+                  </tr>
+                </thead>
+                <tbody>
+              <tr>
+                <td>1日目</td>
+                <td>09:30-10:00</td>
+                <td>受付、PC確認、会場案内</td>
+                <td>参加環境を整える</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>10:00-10:30</td>
+                <td>オープニング、2日間のゴール、完成基準の共有</td>
+                <td>何を作り、どこまで仕上げる研修かを揃える</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>10:30-11:10</td>
+                <td>パソコン太郎本人講義: AIを会社に残るソフトへ変える考え方</td>
+                <td>AI活用を「作って使う」視点に切り替える</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>11:10-12:00</td>
+                <td>社内アプリの全体像、ログイン、保存、共有、AI接続の考え方</td>
+                <td>何を作っているか迷わない土台を作る</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>12:00-13:00</td>
+                <td>昼休憩</td>
+                <td>休憩</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>13:00-14:30</td>
+                <td>受講環境確認、全員共通アプリ制作 前半</td>
+                <td>入力、保存、AI回答の流れを作る</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>14:30-14:45</td>
+                <td>休憩</td>
+                <td>休憩</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>14:45-16:15</td>
+                <td>全員共通アプリ制作 後半</td>
+                <td>会社で触れる形まで仕上げる</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>16:15-17:00</td>
+                <td>社内共有URL確認、動作確認、修正</td>
+                <td>1本目を持ち帰れる状態にする</td>
+              </tr>
+              <tr>
+                <td>1日目</td>
+                <td>17:00-17:45</td>
+                <td>2日目に使う自社ファイルの選定、宿題、質疑応答</td>
+                <td>2本目の題材を決める</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>10:00-10:20</td>
+                <td>1日目の振り返り、自社ファイル確認</td>
+                <td>2本目の制作準備を整える</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>10:20-11:00</td>
+                <td>パソコン太郎本人講義: 自社アプリの作り方と範囲の決め方</td>
+                <td>2日で作れる範囲へ絞る</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>11:00-12:00</td>
+                <td>自社アプリの目的整理、質問表作成</td>
+                <td>ファイルに足りない判断基準を聞ける状態にする</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>12:00-13:00</td>
+                <td>昼休憩</td>
+                <td>休憩</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>13:00-14:00</td>
+                <td>2人1組ヒアリング、音声回答</td>
+                <td>現場の例外、判断基準、言い回しを集める</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>14:00-14:45</td>
+                <td>音声内容の整理、自社アプリへの反映準備</td>
+                <td>画面、保存項目、AIへの指示に使える材料へ変える</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>14:45-15:00</td>
+                <td>休憩</td>
+                <td>休憩</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>15:00-16:30</td>
+                <td>自社アプリ制作</td>
+                <td>御社ファイルをもとに2本目を形にする</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>16:30-17:15</td>
+                <td>社内共有URL確認、動作確認、改善</td>
+                <td>2本目を会社で試せる状態にする</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>17:15-17:45</td>
+                <td>パソコン太郎本人まとめ、3本目の作成計画、質疑応答</td>
+                <td>帰社後に次の1本へ進む準備をする</td>
+              </tr>
+              <tr>
+                <td>2日目</td>
+                <td>18:30-20:30</td>
+                <td>懇親会 希望者参加・別途5,000円</td>
+                <td>パソコン太郎本人も参加。質問、交流、次の展開を相談できます</td>
+              </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="label">APP IDEAS</div>
+          <h2>たとえば、こんな社内Webアプリが作れるかもしれません。</h2>
+          <p class="lead">当日作る内容は、御社のファイルと2日で作れる範囲に合わせて決めます。大きな基幹システムではなく、すぐ試せる小さな業務アプリに絞ります。</p>
+        </div>
+        <div class="grid-4">
+          <div class="card"><h3>AI日報タイムカード</h3><p>勤怠、日報、予定を入力し、AIが要約と注意点を出す。</p></div>
+          <div class="card"><h3>見積もり下書き</h3><p>料金表や過去見積から、概算、注意事項、返信文を作る。</p></div>
+          <div class="card"><h3>社内マニュアル質問</h3><p>就業規則や手順書をもとに、社員の質問へ答える。</p></div>
+          <div class="card"><h3>問い合わせ返信</h3><p>過去メールやFAQから、返信文と確認項目を出す。</p></div>
+          <div class="card"><h3>現場チェック記録</h3><p>点検表や作業手順をWeb化し、抜け漏れを整理する。</p></div>
+          <div class="card"><h3>会議メモ整理</h3><p>音声メモから、決定事項、担当、期限をまとめる。</p></div>
+          <div class="card"><h3>商品/在庫検索</h3><p>商品一覧や在庫表から、条件に合う候補を探す。</p></div>
+          <div class="card"><h3>採用/面談整理</h3><p>面談メモから、懸念点と次に聞く質問を整理する。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="price" class="band">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">PRICE</div>
+          <h2>商品は1つ。第1期は2026年10月7日(水)・8日(木)、宇都宮で最大12人限定です。</h2>
+          <p class="lead">安い座学ではなく、成果物と運用の入口を会社に残す2日間の実装研修として設計します。</p>
+        </div>
+        <div class="price-box">
+          <div class="price-main">
+            <span class="badge">第1期 10/7(水)・8(木) 最大12人限定</span>
+            <h3>パソコン太郎メゾットAI講習会 初級編</h3>
+            <div class="price">1人40万円</div>
+            <p>休憩を除く標準13時間前後のOFF-JT研修。助成金活用を希望する会社は、事前に顧問社労士または管轄労働局へ確認してください。2日目夜の懇親会は希望者参加、別途5,000円です。</p>
+          </div>
+          <div class="deliverables">
+            <div class="card greenline"><h3>共通アプリ</h3><p>AI日報タイムカードを全員で作り、作成から公開までの型を覚えます。</p></div>
+            <div class="card greenline"><h3>自社アプリ</h3><p>御社のファイルをもとに、社内で試せるWebアプリを作ります。</p></div>
+            <div class="card greenline"><h3>社内共有URL</h3><p>会社の人がURLで使える状態を目指し、運用前提で確認します。</p></div>
+            <div class="card greenline"><h3>手順書一式</h3><p>作成データ、改善履歴、3つ目を作るための手順を持ち帰ります。</p></div>
+          </div>
+        </div>
+        <div class="section-cta">
+          <div>
+            <strong>価格を見て迷ったら、まず仮申し込みで確認してください。</strong>
+            <span>仮申し込みは本申込ではありません。参加可否、助成金、持ち込みファイルを確認してから確定します。</span>
+          </div>
+          <a class="button primary" href="#entry">この条件で仮申し込みしておく</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="label">ENTRY FLOW</div>
+          <h2>仮申し込み後に、作るアプリと助成金の確認ポイントを整理します。</h2>
+          <p class="lead">フォーム送信だけで本申込確定ではありません。第1期の枠を押さえる入口として、まず「2日で成果物になりやすいファイルか」「受講準備ができるか」「助成金を検討する場合に何を確認すべきか」を整理します。</p>
+        </div>
+        <div class="grid-3">
+          <div class="card blueline"><h3>1. 仮申し込み</h3><p>参加人数、会社の業種、作りたい業務アプリの候補をフォームで送ります。</p></div>
+          <div class="card blueline"><h3>2. ファイル候補確認</h3><p>Excel、PDF、マニュアルなど、2日で扱いやすいファイルを1つに絞ります。</p></div>
+          <div class="card blueline"><h3>3. 助成金の事前確認</h3><p>希望する会社は、顧問社労士または管轄労働局へ計画届や対象可否を確認します。</p></div>
+          <div class="card blueline"><h3>4. 受講確定</h3><p>日程、人数、支払い、持ち込みファイル、参加条件を確認して受講を確定します。</p></div>
+          <div class="card blueline"><h3>5. 準備案内</h3><p>当日使う環境、必要な契約、Chrome設定、講習ページURLを個別に案内します。</p></div>
+          <div class="card blueline"><h3>6. 当日参加</h3><p>講習ページの手順に沿って、プロンプトをコピーしながら2本のアプリを作ります。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="label">SUBSIDY DETAILS</div>
+          <h2>対象候補となる助成金と、受講時の見え方</h2>
+          <p class="lead">中小企業のDX/AI人材育成として、人材開発支援助成金「事業展開等リスキリング支援コース」を想定しています。給与補償にあたる賃金助成も検討対象です。</p>
+        </div>
+        <details class="fold-panel">
+          <summary>助成金の計算詳細と注意事項を見る</summary>
+          <div class="fold-body">
+            <div class="subsidy-table-wrap">
+              <table aria-label="助成金活用時の目安">
+                <thead>
+                  <tr>
+                    <th>会社区分</th>
+                    <th>研修費への助成目安</th>
+                    <th>給与への助成目安</th>
+                    <th>受講時の考え方</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>中小企業</td>
+                    <td><strong>最大30万円</strong><br>40万円×75%の目安</td>
+                    <td><strong>13,000円</strong><br>13時間×1,000円の目安</td>
+                    <td>受講料部分は40万円から30万円助成の対象候補。賃金助成は研修時間中に支払う給与負担を補う枠です。</td>
+                  </tr>
+                  <tr>
+                    <td>中小企業以外</td>
+                    <td><strong>最大20万円</strong><br>10時間以上100時間未満の上限目安</td>
+                    <td><strong>6,500円</strong><br>13時間×500円の目安</td>
+                    <td>会社規模、訓練内容、申請条件により助成率と上限が変わります。事前確認が必要です。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="notice">
+              助成金は支給保証ではありません。申請可否、対象経費、支給額、提出書類、計画届の期限は、御社の顧問社労士または管轄労働局へご確認ください。当社は申請代行を行いません。当日利用する有料サービス契約費、PC、交通費、宿泊費などは研修費とは分けて扱い、助成対象と断定しません。助成金の確認は仮申し込み後から受講確定前までの事前確認事項とし、当日の研修本編はAI業務Webアプリ制作に集中します。
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="requirements" class="dark">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">REQUIREMENTS</div>
+          <h2>参加条件</h2>
+          <p class="lead">受講前に必要なものです。当日使う環境名や設定手順は、受講確定後に個別案内します。</p>
+        </div>
+        <div class="requirements">
+          <div class="req"><strong>2日間参加できること</strong><span>宇都宮会場で初日から最後まで参加</span></div>
+          <div class="req"><strong>Googleアカウント</strong><span>本人がログインでき、二段階認証も対応できる状態</span></div>
+          <div class="req"><strong>クレジットカード</strong><span>当日利用する有料サービス登録に使用</span></div>
+          <div class="req"><strong>ノートPC 16GB以上</strong><span>Mac/Windows可。メモリ16GB以上必須</span></div>
+          <div class="req"><strong>最新版Chrome</strong><span>Chromeをインストールし、ログインできる状態</span></div>
+          <div class="req"><strong>PCの管理者権限</strong><span>必要なアプリや拡張機能を入れられること</span></div>
+          <div class="req"><strong>有料サービス契約費</strong><span>当日案内する下位有料プラン月額100ドル目安を契約できること</span></div>
+          <div class="req"><strong>業務ファイル1つ</strong><span>Excel、PDF、マニュアルなど。個人情報は匿名化推奨</span></div>
+          <div class="req"><strong>録音できる環境</strong><span>PCまたはスマホで音声メモを残せること</span></div>
+          <div class="req"><strong>スマホ持参</strong><span>二段階認証、録音、本人確認で使用</span></div>
+          <div class="req"><strong>社内利用の許可</strong><span>持ち込むファイルを研修で使える社内確認</span></div>
+          <div class="req"><strong>助成金希望は事前確認</strong><span>顧問社労士または労働局へ事前相談</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="qa">
+      <div class="container">
+        <div class="section-head">
+          <div class="label">Q&A</div>
+          <h2>よくある質問</h2>
+          <p class="lead">参加前に不安になりやすいところを、先に整理しています。</p>
+        </div>
+        <div class="faq">
+          <details class="qa">
+            <summary>Q. パソコンが得意ではなくても参加できますか？</summary>
+            <p>A. 参加できます。ただし、Googleアカウントでログインする、Chromeを使う、ファイルをアップロードする、コピー&ペーストする程度の基本操作は必要です。</p>
+          </details>
+          <details class="qa">
+            <summary>Q. 具体的にどのツールを使うのですか？</summary>
+            <p>A. 当日使う環境名、契約するサービス名、設定手順は受講確定後に案内します。先に誤った契約や設定をしてしまうのを避けるためです。</p>
+          </details>
+          <details class="qa">
+            <summary>Q. 2日で本当に会社で使えるWebアプリになりますか？</summary>
+            <p>A. 大きな基幹システムを作る研修ではありません。業務ファイルを1つに絞り、入力、保存、AI回答、社内共有URLまでの小さなWebアプリとして作ります。</p>
+          </details>
+          <details class="qa">
+            <summary>Q. 研修後、自分たちだけで3つ目を作れますか？</summary>
+            <p>A. 初級編のゴールは、2本を持ち帰り、3つ目の小さなWebアプリを自分たちで作れる状態にすることです。並走して教えてほしい場合は、中級編としてAI実装伴走を案内します。</p>
+          </details>
+          <details class="qa">
+            <summary>Q. 助成金は必ず受けられますか？</summary>
+            <p>A. 支給保証はできません。対象候補として設計しますが、申請可否、支給額、提出書類は顧問社労士または管轄労働局へ確認してください。</p>
+          </details>
+          <details class="qa">
+            <summary>Q. 研修費以外に必要な費用はありますか？</summary>
+            <p>A. 別途、当日案内する有料サービスの下位プランとして月額100ドル目安の契約が必要です。交通費、宿泊費、PC、通信費などは研修費に含まれません。</p>
+          </details>
+          <details class="qa">
+            <summary>Q. 懇親会はありますか？</summary>
+            <p>A. 1日目夜は宿題の時間を確保するため、懇親会は2日目の研修後に行います。希望者参加で、パソコン太郎本人も参加します。第1期は2日間とも本人がメイン講師を務めます。参加費は別途5,000円です。</p>
+          </details>
+          <details class="qa">
+            <summary>Q. 持ち込むファイルに個人情報が入っていても大丈夫ですか？</summary>
+            <p>A. 個人情報や機密情報は、可能な限り匿名化、サンプル化して持ち込んでください。研修では、2日で作れる範囲に絞って扱います。</p>
+          </details>
+        </div>
+        <div class="section-cta">
+          <div>
+            <strong>不安が残る場合も、仮申し込み後に確認できます。</strong>
+            <span>本申込ではないため、条件確認後に参加するか判断できます。第1期の12人枠だけ先に押さえてください。</span>
+          </div>
+          <a class="button primary" href="#entry">確認前提で仮申し込みする</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="entry" class="cta entry-section">
+      <div class="container entry-grid">
+        <div class="entry-copy">
+          <div class="label">PRE-ENTRY FORM</div>
+          <h2>第1期は2026年10月7日(水)・8日(木)、宇都宮開催。最大12人限定の参加枠を押さえてください。</h2>
+          <p>仮申し込み後、御社ならどのファイルから始めると2日で成果物になりやすいか、助成金を検討するなら何を確認すべきかを15分ほどで整理します。</p>
+          <p class="entry-note">仮申し込みは本申込確定ではありません。日程、人数、持ち込みファイル、参加条件、助成金確認の状況を確認したうえで、本申込へ進みます。</p>
+        </div>
+        <form class="entry-form" id="preEntryForm" aria-label="仮申し込みフォーム">
+          <div class="form-grid">
+            <label>会社名
+              <input type="text" name="company" autocomplete="organization" required>
+            </label>
+            <label>担当者名
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+            <label>メールアドレス
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+            <label>電話番号
+              <input type="tel" name="tel" autocomplete="tel">
+            </label>
+            <label>参加予定人数
+              <input type="number" name="participants" min="1" max="12" value="1" required>
+            </label>
+            <label>助成金の活用
+              <select name="subsidy">
+                <option value="検討したい">検討したい</option>
+                <option value="すでに社労士へ相談中">すでに社労士へ相談中</option>
+                <option value="今回は使わない">今回は使わない</option>
+                <option value="まだ分からない">まだ分からない</option>
+              </select>
+            </label>
+            <label>懇親会の参加希望
+              <select name="party">
+                <option value="参加したい">参加したい</option>
+                <option value="人数を確認して決めたい">人数を確認して決めたい</option>
+                <option value="参加しない">参加しない</option>
+              </select>
+            </label>
+            <label>持ち込みファイル候補
+              <input type="text" name="file" placeholder="例: 日報Excel、料金表PDF、社内マニュアル">
+            </label>
+            <label class="wide">作りたいアプリ・確認したいこと
+              <textarea name="message" rows="4" placeholder="例: まず全社員で使える日報アプリを作りたい。助成金の事前確認もしたい。"></textarea>
+            </label>
+          </div>
+          <button class="button primary form-submit" type="submit">仮申し込み内容を送る</button>
+          <div class="entry-subactions">
+            <a class="entry-mail" href="mailto:info@pasotaro.com?subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">まだ迷っている方は相談メールを送る</a>
+          </div>
+          <p class="form-note" id="formStatus">送信ボタンを押すと、入力内容をまとめたメール下書きが開きます。正式な申込フォームURLに差し替える場合は、この部分を差し替えます。</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <button class="chat-launch" type="button" id="chatLaunch" aria-controls="entryChat" aria-expanded="false">
+    <span class="chat-launch-main">質問AIチャット</span>
+    <span class="chat-launch-sub">申込前に確認できます</span>
+  </button>
+  <aside class="chat-panel" id="entryChat" aria-label="講習会質問AIチャット">
+    <div class="chat-head">
+      <div>
+        <strong>第1期の質問AIチャット</strong>
+        <span>仮申し込み前の不安を整理します</span>
+      </div>
+      <button class="chat-close" type="button" id="chatClose" aria-label="チャットを閉じる">×</button>
+    </div>
+    <div class="chat-log" id="chatLog">
+      <div class="chat-msg bot">第1期は2026年10月7日(水)・8日(木)、宇都宮開催、最大12人限定。パソコン太郎本人が2日間メイン講師を務める特別回です。気になることを選んでください。</div>
+    </div>
+    <div class="chat-actions">
+      <button class="chat-choice" type="button" data-chat="fit">うちの会社でも作れますか？</button>
+      <button class="chat-choice" type="button" data-chat="subsidy">助成金だといくらくらいですか？</button>
+      <button class="chat-choice" type="button" data-chat="file">どんなファイルを持っていけばいいですか？</button>
+      <button class="chat-choice" type="button" data-chat="track">パソコン太郎の実績は？</button>
+      <button class="chat-choice" type="button" data-chat="pasotaro">第1期は本人がメイン講師ですか？</button>
+      <button class="chat-choice" type="button" data-chat="party">懇親会はありますか？</button>
+      <button class="chat-choice" type="button" data-chat="prepare">参加前に何が必要ですか？</button>
+      <a class="chat-entry" href="#entry">仮申し込みフォームへ</a>
+      <a class="chat-entry secondary" href="mailto:info@pasotaro.com?subject=パソコン太郎メゾットAI講習会 初級編の事前相談&body=パソコン太郎メゾットAI講習会 初級編について、仮申し込み前に相談したいです。%0A%0A会社名:%0Aお名前:%0A相談したい内容:%0A">相談メールを送る</a>
+    </div>
+  </aside>
+
+  <footer>
+    <div class="container">© ITSupportパソコン太郎株式会社 / パソコン太郎メゾットAI講習会 初級編</div>
+  </footer>
+  <script>
+    const chatLaunch = document.getElementById("chatLaunch");
+    const chatClose = document.getElementById("chatClose");
+    const chatPanel = document.getElementById("entryChat");
+    const chatLog = document.getElementById("chatLog");
+    const preEntryForm = document.getElementById("preEntryForm");
+    const formStatus = document.getElementById("formStatus");
+    const chatAnswers = {
+      fit: "業務に使っているExcel、PDF、マニュアル、日報、問い合わせ履歴などが1つでもあれば候補になります。2日で作れる範囲に絞るので、まずは「会社でよく聞かれること」「毎回同じ判断をしていること」から始めるのがおすすめです。その条件なら成果物候補になりやすいので、まず仮申し込みで枠を押さえて、どのファイルから始めるか一緒に確認してください。",
+      subsidy: "中小企業の場合、研修費40万円に対して最大30万円の経費助成、さらに13時間分で13,000円の賃金助成が対象候補です。支給保証ではないため、顧問社労士または管轄労働局への事前確認が必要です。開催日は2026年10月7日(水)・8日(木)なので、助成金を検討する会社ほど先に仮申し込みで研修枠と確認事項を押さえるのがおすすめです。",
+      file: "おすすめは、すでに業務で使っているExcel、PDF、マニュアル、料金表、日報、問い合わせ履歴です。個人情報や機密情報は匿名化・サンプル化してください。仮申し込み後に、どのファイルが成果物になりやすいか一緒に整理します。迷う場合も、まず仮申し込みで候補を出してもらえればこちらで絞れます。",
+      track: "パソコン太郎は、幼稚園生から高齢者まで1000時間以上の講習会・授業を行い、NPO ITアット宇都宮の立ち上げにも初代理事長として関わってきました。著名なビジネスインフルエンサーとのAI・出版プロジェクト、国会議員へのAI・ITレクチャー、教育委員会、金融機関、商工会議所向け講習など、相手に合わせてITとAIを分かる言葉にしてきた人です。第1期はその本人が2日間メイン講師を務めるため、本人の見立てを受けたい会社は仮申し込みで枠を押さえておくのがおすすめです。",
+      pasotaro: "はい。2026年10月7日(水)・8日(木)の第1期は、パソコン太郎本人が2日間のメイン講師を務めます。講義、見立て、制作の判断、まとめまで本人が中心となって進行します。今後はパソコン太郎メゾットを理解した講師が担当する可能性があるため、本人の判断基準を直接受け取れる特別回です。本人から直接受けたい場合は、第1期の仮申し込みで先に枠を押さえてください。",
+      party: "あります。1日目夜は宿題の時間を確保し、2日目の研修後に希望者参加の懇親会を開催します。パソコン太郎本人も参加し、第1期は2日間とも本人がメイン講師を務めます。参加費は別途5,000円です。懇親会まで含めて本人に聞ける機会なので、参加希望も仮申し込みフォームで入れてください。",
+      prepare: "Googleアカウント、最新版Chrome、16GB以上のノートPC、クレジットカード、業務ファイル1つ、録音できる環境が必要です。当日使う環境名や設定手順は、受講確定後に個別案内します。準備に不安がある場合も、仮申し込み後に一緒に確認できます。"
+    };
+
+    function toggleChat(open) {
+      chatPanel.classList.toggle("open", open);
+      chatLaunch.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    function addMessage(text, type) {
+      const message = document.createElement("div");
+      message.className = `chat-msg ${type}`;
+      message.textContent = text;
+      chatLog.appendChild(message);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    chatLaunch.addEventListener("click", () => toggleChat(!chatPanel.classList.contains("open")));
+    chatClose.addEventListener("click", () => toggleChat(false));
+    document.querySelectorAll("[data-chat]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const key = button.getAttribute("data-chat");
+        addMessage(button.textContent, "user");
+        addMessage(chatAnswers[key], "bot");
+      });
+    });
+
+    preEntryForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(preEntryForm);
+      const subject = "パソコン太郎メゾットAI講習会 初級編 仮申し込み";
+      const body = [
+        "パソコン太郎メゾットAI講習会 初級編（2026年10月7日(水)・8日(木) 宇都宮開催）の仮申し込みです。",
+        "",
+        `会社名: ${data.get("company") || ""}`,
+        `担当者名: ${data.get("name") || ""}`,
+        `メールアドレス: ${data.get("email") || ""}`,
+        `電話番号: ${data.get("tel") || ""}`,
+        `参加予定人数: ${data.get("participants") || ""}`,
+        `助成金の活用: ${data.get("subsidy") || ""}`,
+        `懇親会の参加希望: ${data.get("party") || ""}`,
+        `持ち込みファイル候補: ${data.get("file") || ""}`,
+        "",
+        "作りたいアプリ・確認したいこと:",
+        data.get("message") || "",
+        "",
+        "※仮申し込み後、日程・人数・持ち込みファイル・参加条件・助成金確認の状況を確認したうえで本申込へ進みます。"
+      ].join("\n");
+      formStatus.textContent = "入力内容をまとめたメール下書きを開きます。メールを送信すると仮申し込みになります。";
+      window.location.href = `mailto:info@pasotaro.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  </script>
+</body>
+</html>
